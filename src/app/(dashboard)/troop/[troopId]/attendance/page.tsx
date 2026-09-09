@@ -75,11 +75,6 @@ export default function AttendancePage() {
 
   const canEdit = myRole !== undefined && myRole !== null && myRole !== "rover";
   const isLive = isOnline && connectionState.isWebSocketConnected;
-  const syncLabel = !isOnline
-    ? "Jste offline"
-    : !connectionState.isWebSocketConnected
-      ? connectionState.hasEverConnected ? "Obnovuji spojení…" : "Připojuji…"
-      : connectionState.inflightMutations > 0 ? "Synchronizuji…" : "Živě synchronizováno";
 
   const handleStatusChange = async (memberId: Id<"members">, status: AttendanceStatus) => {
     if (!meetingDate || !canEdit) return;
@@ -106,7 +101,7 @@ export default function AttendancePage() {
     return (
       <main className={styles.page}>
         <header className={styles.header}>
-          <div><span className={styles.eyebrow}>Oddíl · {troop.name}</span><h1>Docházka</h1></div>
+          <h1>Docházka</h1>
         </header>
         <section className={styles.setupCard}>
           <CalendarDays size={42} aria-hidden="true" />
@@ -126,15 +121,7 @@ export default function AttendancePage() {
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <div>
-          <span className={styles.eyebrow}>Oddíl · {troop.name}</span>
-          <h1>Docházka</h1>
-          <p>Klikněte na stav u každého člena. Změny se živě propíšou všem připojeným vedoucím.</p>
-        </div>
-        <div className={`${styles.syncBadge} ${!isOnline ? styles.offline : !isLive ? styles.connecting : ""}`} role="status">
-          <span aria-hidden="true" />
-          {syncLabel}
-        </div>
+        <h1>Docházka</h1>
       </header>
 
       <section className={styles.toolbar} aria-label="Výběr schůzky">
