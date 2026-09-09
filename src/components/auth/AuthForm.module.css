@@ -8,6 +8,7 @@
     position: relative;
     width: 100%;
     max-width: 400px;
+    min-width: 0;
     height: auto;
     /* explicit auto to avoid inheritance issues if any */
 
@@ -48,6 +49,12 @@
     width: 100%;
 }
 
+.nameFields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1rem;
+}
+
 .label {
     font-size: 0.875rem;
     font-weight: 500;
@@ -56,6 +63,7 @@
 
 .input {
     width: 100%;
+    min-width: 0;
     padding: 0.6rem 1rem;
     border: var(--border-width) solid #e4e4e7;
     border-radius: 6px;
@@ -97,4 +105,19 @@
 
 .link:hover {
     color: var(--color-primary-text);
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 1.25rem 1rem;
+    }
+
+    .container:hover {
+        box-shadow: none;
+        transform: none;
+    }
+
+    .nameFields {
+        grid-template-columns: 1fr;
+    }
 }

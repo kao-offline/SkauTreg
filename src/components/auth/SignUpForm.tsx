@@ -172,7 +172,7 @@ export default function SignUpForm() {
             </div>
 
             <form onSubmit={handleSubmit} className={styles.form}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className={styles.nameFields}>
                     <div className={styles.formGroup}>
                         <label className={styles.label}>
                             First Name
