@@ -8,6 +8,7 @@ import {
     Bus,
     CalendarDays,
     CircleUserRound,
+    ClipboardCheck,
     ClipboardList,
     FileText,
     Flag,
@@ -163,6 +164,7 @@ export function CommandMenu() {
                                 {troops.flatMap((troop) => [
                                     <PaletteItem key={`${troop._id}-overview`} icon={FolderKanban} label={`${troop.name} – přehled`} description="Přehled oddílu" value={`${troop.name} oddíl přehled`} onSelect={() => go(`/troop/${troop._id}`)} />,
                                     <PaletteItem key={`${troop._id}-members`} icon={Users} label={`${troop.name} – členové`} description="Členové oddílu" value={`${troop.name} členové skauti`} onSelect={() => go(`/members?troopId=${troop._id}`)} />,
+                                    <PaletteItem key={`${troop._id}-attendance`} icon={ClipboardCheck} label={`${troop.name} – docházka`} description="Docházka na pravidelných schůzkách" value={`${troop.name} docházka schůzka přítomnost`} onSelect={() => go(`/troop/${troop._id}/attendance`)} />,
                                     <PaletteItem key={`${troop._id}-trips`} icon={TentTree} label={`${troop.name} – výpravy`} description="Nadcházející výpravy oddílu" value={`${troop.name} výpravy nadcházející`} onSelect={() => go(`/trips?troopId=${troop._id}&tab=upcoming`)} />,
                                     <PaletteItem key={`${troop._id}-archive`} icon={TentTree} label={`${troop.name} – archiv výprav`} value={`${troop.name} výpravy archiv staré`} onSelect={() => go(`/trips?troopId=${troop._id}&tab=old`)} />,
                                     <PaletteItem key={`${troop._id}-meetings`} icon={Flag} label={`${troop.name} – rady a zápisy`} value={`${troop.name} rady zápisy`} onSelect={() => go(`/troop/${troop._id}/meetings?tab=all`)} />,

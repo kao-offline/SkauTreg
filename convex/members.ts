@@ -98,6 +98,11 @@ export const remove = mutation({
         const member = await ctx.db.get(args.id);
         if (!member) return;
         await requireTroopEditor(ctx, member.troopId);
+        const attendanceRecords = await ctx.db
+            .query("attendance")
+            .withIndex("by_member", (q) => q.eq("memberId", args.id))
+            .collect();
+        for (const record of attendanceRecords) await ctx.db.delete(record._id);
         await ctx.db.delete(args.id);
     },
 });

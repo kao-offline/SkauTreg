@@ -10,6 +10,7 @@ import { useState, useCallback, useEffect } from "react";
 import Cropper from "react-easy-crop";
 import type { Point, Area } from "react-easy-crop";
 import GmailSettings from "../../../../components/GmailSettings";
+import { MEETING_DAYS, type MeetingDay } from "../../../../lib/attendance";
 import styles from "./SettingsPage.module.css";
 
 // --- Helpers for Image Upload (Copied/Adapted) ---
@@ -102,7 +103,8 @@ export default function TroopSettingsPage() {
         description: "",
         contactEmail: "",
         infoEmail: "",
-        accentColor: ""
+        accentColor: "",
+        meetingDay: "" as "" | MeetingDay,
     });
 
     // Image Upload State
@@ -129,7 +131,8 @@ export default function TroopSettingsPage() {
                 description: troop.description || "",
                 contactEmail: troop.contactEmail || "",
                 infoEmail: troop.infoEmail || "",
-                accentColor: troop.accentColor || ""
+                accentColor: troop.accentColor || "",
+                meetingDay: troop.meetingDay ?? "",
             });
         }
     }, [troop]);
@@ -191,6 +194,7 @@ export default function TroopSettingsPage() {
                 contactEmail: formData.contactEmail,
                 infoEmail: formData.infoEmail,
                 accentColor: formData.accentColor,
+                ...(formData.meetingDay === "" ? {} : { meetingDay: formData.meetingDay }),
                 logo: logoStorageId // Only update if new one uploaded
             });
             // Saved silently, no popup
@@ -272,6 +276,26 @@ export default function TroopSettingsPage() {
                                     style={inputStyle}
                                 />
                             </div>
+                        </div>
+                        <div id="attendance-settings" className={styles.attendanceSetting}>
+                            <div>
+                                <strong>Den pravidelné schůzky</strong>
+                                <span>Podle tohoto dne se v Docházce automaticky otevře správná schůzka.</span>
+                            </div>
+                            <label>
+                                <span className={styles.srOnly}>Den pravidelné schůzky</span>
+                                <select
+                                    value={formData.meetingDay}
+                                    onChange={(event) => setFormData({
+                                        ...formData,
+                                        meetingDay: event.target.value === "" ? "" : Number(event.target.value) as MeetingDay,
+                                    })}
+                                    style={inputStyle}
+                                >
+                                    <option value="" disabled>Vyberte den</option>
+                                    {MEETING_DAYS.map((day) => <option key={day.value} value={day.value}>{day.label}</option>)}
+                                </select>
+                            </label>
                         </div>
                         <div style={formGroupStyle}>
                             <label style={labelStyle}>Popis</label>

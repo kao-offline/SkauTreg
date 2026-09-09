@@ -9,6 +9,7 @@
  */
 
 import type * as appVersions from "../appVersions.js";
+import type * as attendance from "../attendance.js";
 import type * as bases from "../bases.js";
 import type * as dataRequests from "../dataRequests.js";
 import type * as editorPresence from "../editorPresence.js";
@@ -61,6 +62,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   appVersions: typeof appVersions;
+  attendance: typeof attendance;
   bases: typeof bases;
   dataRequests: typeof dataRequests;
   editorPresence: typeof editorPresence;

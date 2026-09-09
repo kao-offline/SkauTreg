@@ -4,6 +4,16 @@ import { normalizeLeaderRole } from "./lib/memberEmails";
 import { authError, requireCurrentUser, requireTroopManager, requireTroopOwner, requireTroopViewer } from "./lib/auth";
 import { decryptCredential, encryptCredential } from "./lib/credentials";
 
+const meetingDayValidator = v.union(
+    v.literal(0),
+    v.literal(1),
+    v.literal(2),
+    v.literal(3),
+    v.literal(4),
+    v.literal(5),
+    v.literal(6),
+);
+
 function redactTroopSecrets<T extends {
     emailProvider?: {
         provider: string;
@@ -44,6 +54,7 @@ export const create = mutation({
         accentColor: v.optional(v.string()),
         contactEmail: v.optional(v.string()),
         infoEmail: v.optional(v.string()),
+        meetingDay: v.optional(meetingDayValidator),
     },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity();
@@ -72,6 +83,7 @@ export const create = mutation({
             accentColor: args.accentColor,
             contactEmail: args.contactEmail,
             infoEmail: args.infoEmail,
+            meetingDay: args.meetingDay,
             publicDirectoryOptIn: false,
         });
 
@@ -90,6 +102,7 @@ export const update = mutation({
         accentColor: v.optional(v.string()),
         contactEmail: v.optional(v.string()),
         infoEmail: v.optional(v.string()),
+        meetingDay: v.optional(meetingDayValidator),
     },
     handler: async (ctx, args) => {
         await requireTroopManager(ctx, args.id);
@@ -401,14 +414,21 @@ export const deleteTroop = internalMutation({
             .collect();
         for (const l of leaders) await ctx.db.delete(l._id);
 
-        // 2. Delete Members
+        // 2. Delete Attendance
+        const attendanceRecords = await ctx.db
+            .query("attendance")
+            .withIndex("by_troop_date", (q) => q.eq("troopId", args.id))
+            .collect();
+        for (const record of attendanceRecords) await ctx.db.delete(record._id);
+
+        // 3. Delete Members
         const members = await ctx.db
             .query("members")
             .withIndex("by_troop", (q) => q.eq("troopId", args.id))
             .collect();
         for (const m of members) await ctx.db.delete(m._id);
 
-        // 3. Delete Trips and Participations
+        // 4. Delete Trips and Participations
         const trips = await ctx.db
             .query("trips")
             .withIndex("by_troop", (q) => q.eq("troopId", args.id))
@@ -423,7 +443,7 @@ export const deleteTroop = internalMutation({
             await ctx.db.delete(t._id);
         }
 
-        // 4. Delete Troop
+        // 5. Delete Troop
         await ctx.db.delete(args.id);
     },
 });

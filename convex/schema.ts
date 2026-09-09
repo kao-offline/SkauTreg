@@ -38,6 +38,15 @@ export default defineSchema({
         accentColor: v.optional(v.string()), // Hex code (pastel preferred)
         contactEmail: v.optional(v.string()),
         infoEmail: v.optional(v.string()),
+        meetingDay: v.optional(v.union(
+            v.literal(0),
+            v.literal(1),
+            v.literal(2),
+            v.literal(3),
+            v.literal(4),
+            v.literal(5),
+            v.literal(6),
+        )),
         publicDirectoryOptIn: v.optional(v.boolean()),
         archivedAt: v.optional(v.string()),
         archivedBy: v.optional(v.id("users")),
@@ -107,6 +116,18 @@ export default defineSchema({
         email: v.optional(v.string()),
         // Extensible fields
     }).index("by_troop", ["troopId"]),
+
+    attendance: defineTable({
+        troopId: v.id("troops"),
+        memberId: v.id("members"),
+        meetingDate: v.string(), // YYYY-MM-DD in the troop's local calendar
+        status: v.union(v.literal("present"), v.literal("absent"), v.literal("excused")),
+        updatedBy: v.id("users"),
+        updatedAt: v.string(),
+    })
+        .index("by_member", ["memberId"])
+        .index("by_troop_date", ["troopId", "meetingDate"])
+        .index("by_troop_date_member", ["troopId", "meetingDate", "memberId"]),
 
     trips: defineTable({
         troopId: v.id("troops"),
