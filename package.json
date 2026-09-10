@@ -14,7 +14,7 @@
     "test:security": "vitest run tests/security",
     "audit:prod": "npm audit --omit=dev --audit-level=high",
     "sync:all": "node scripts/sync-all-bases-with-stations.mjs",
-    "deploy:convex": "npx convex deploy --prod",
+    "deploy:convex": "npx convex deploy",
     "sync:prod": "node scripts/sync-all-bases-with-stations.mjs --prod",
     "preload:stations:v2": "node scripts/preload-base-stations-v2.mjs"
   },
