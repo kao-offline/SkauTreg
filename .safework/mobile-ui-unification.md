@@ -12,3 +12,4 @@
 - npm audit:prod still fails on 41 pre-existing advisories (32 moderate, seven high, two critical). Dependencies and lockfile are unchanged.
 - Deployment path: clean committed export to the existing Vercel skau-treg project as preview; production remains on its prior revision. Exact delivery results are recorded in ../SkauTreg-mobile-delivery.md.
 - Rollback: revert the focused commit or use the previous preview. No database rollback is needed.
+- CI follow-up: the first run passed all 48 assertions but exposed pending React work from the existing public-troop-badges test. Its Convex client mock was unstable across renders and it lacked explicit cleanup. The follow-up stabilizes the test client, cleans up each render and asserts the healthy query runs once; application source is unchanged.
