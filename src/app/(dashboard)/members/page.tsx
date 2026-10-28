@@ -612,9 +612,9 @@ export default function MembersPage() {
                 <ModalShell className={styles.memberDialog} width="500px" aria-label="Údaje člena" onClose={isSaving ? undefined : () => setShowModal(false)} style={{
                         backgroundColor: "white",
                         padding: "clamp(1rem, 4vw, 2rem)",
-                        border: "3px solid #000",
+                        border: "var(--border-ui)",
                         borderRadius: "16px",
-                        boxShadow: "8px 8px 0 0 #000",
+                        boxShadow: "var(--shadow-md)",
                         width: "100%",
                         maxWidth: "500px",
                         maxHeight: "calc(100dvh - 2rem)",
@@ -631,14 +631,14 @@ export default function MembersPage() {
                                     title="Smazat člena"
                                     style={{
                                         backgroundColor: "#fca5a5",
-                                        border: "2px solid #000",
+                                        border: "var(--border-ui)",
                                         borderRadius: "6px",
                                         width: "64px",
                                         height: "54px",
                                         padding: "15px",
                                         fontWeight: "bold",
                                         cursor: "pointer",
-                                        boxShadow: "2px 2px 0 0 #000",
+                                        boxShadow: "var(--shadow-md)",
                                         display: "inline-flex",
                                         alignItems: "center",
                                         justifyContent: "center"
@@ -670,7 +670,7 @@ export default function MembersPage() {
                                             required
                                             value={formData.name}
                                             onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                            style={{ width: "100%", padding: "0.6rem", border: "2px solid #000", borderRadius: "6px", boxShadow: "4px 4px 0 0 #000", outline: "none", fontWeight: "600" }}
+                                            style={{ width: "100%", padding: "0.6rem", border: "var(--border-ui)", borderRadius: "6px", boxShadow: "var(--shadow-md)", outline: "none", fontWeight: "600" }}
                                         />
                                     </div>
                                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))", gap: "1rem" }}>
@@ -679,7 +679,7 @@ export default function MembersPage() {
                                             <input
                                                 value={formData.nickname}
                                                 onChange={e => setFormData({ ...formData, nickname: e.target.value })}
-                                                style={{ width: "100%", padding: "0.6rem", border: "2px solid #000", borderRadius: "6px", boxShadow: "4px 4px 0 0 #000", outline: "none", fontWeight: "600" }}
+                                                style={{ width: "100%", padding: "0.6rem", border: "var(--border-ui)", borderRadius: "6px", boxShadow: "var(--shadow-md)", outline: "none", fontWeight: "600" }}
                                             />
                                         </div>
                                         <div>
@@ -687,7 +687,7 @@ export default function MembersPage() {
                                             <input
                                                 value={formData.birthDate}
                                                 onChange={e => setFormData({ ...formData, birthDate: e.target.value })}
-                                                style={{ width: "100%", padding: "0.6rem", border: "2px solid #000", borderRadius: "6px", boxShadow: "4px 4px 0 0 #000", outline: "none", fontWeight: "600" }}
+                                                style={{ width: "100%", padding: "0.6rem", border: "var(--border-ui)", borderRadius: "6px", boxShadow: "var(--shadow-md)", outline: "none", fontWeight: "600" }}
                                                 placeholder="1.1.2012"
                                             />
                                         </div>
@@ -705,7 +705,7 @@ export default function MembersPage() {
                                             required
                                             value={formData.guardianName}
                                             onChange={e => setFormData({ ...formData, guardianName: e.target.value })}
-                                            style={{ width: "100%", padding: "0.6rem", border: "2px solid #000", borderRadius: "6px", boxShadow: "4px 4px 0 0 #000", outline: "none", fontWeight: "600" }}
+                                            style={{ width: "100%", padding: "0.6rem", border: "var(--border-ui)", borderRadius: "6px", boxShadow: "var(--shadow-md)", outline: "none", fontWeight: "600" }}
                                         />
                                     </div>
                                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))", gap: "1rem" }}>
@@ -716,7 +716,7 @@ export default function MembersPage() {
                                                 type="tel"
                                                 value={formData.guardianPhone}
                                                 onChange={e => setFormData({ ...formData, guardianPhone: e.target.value })}
-                                                style={{ width: "100%", padding: "0.6rem", border: "2px solid #000", borderRadius: "6px", boxShadow: "4px 4px 0 0 #000", outline: "none", fontWeight: "600" }}
+                                                style={{ width: "100%", padding: "0.6rem", border: "var(--border-ui)", borderRadius: "6px", boxShadow: "var(--shadow-md)", outline: "none", fontWeight: "600" }}
                                             />
                                         </div>
                                         <div>
@@ -725,7 +725,7 @@ export default function MembersPage() {
                                                 type="email"
                                                 value={formData.guardianEmail}
                                                 onChange={e => setFormData({ ...formData, guardianEmail: e.target.value })}
-                                                style={{ width: "100%", padding: "0.6rem", border: "2px solid #000", borderRadius: "6px", boxShadow: "4px 4px 0 0 #000", outline: "none", fontWeight: "600" }}
+                                                style={{ width: "100%", padding: "0.6rem", border: "var(--border-ui)", borderRadius: "6px", boxShadow: "var(--shadow-md)", outline: "none", fontWeight: "600" }}
                                             />
                                         </div>
                                     </div>
@@ -743,7 +743,7 @@ export default function MembersPage() {
                                         <input
                                             value={formData.guardian2Name}
                                             onChange={e => setFormData({ ...formData, guardian2Name: e.target.value })}
-                                            style={{ width: "100%", padding: "0.6rem", border: "2px solid #000", borderRadius: "6px", boxShadow: "4px 4px 0 0 #000", outline: "none", fontWeight: "600" }}
+                                            style={{ width: "100%", padding: "0.6rem", border: "var(--border-ui)", borderRadius: "6px", boxShadow: "var(--shadow-md)", outline: "none", fontWeight: "600" }}
                                         />
                                     </div>
                                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))", gap: "1rem" }}>
@@ -753,7 +753,7 @@ export default function MembersPage() {
                                                 type="tel"
                                                 value={formData.guardian2Phone}
                                                 onChange={e => setFormData({ ...formData, guardian2Phone: e.target.value })}
-                                                style={{ width: "100%", padding: "0.6rem", border: "2px solid #000", borderRadius: "6px", boxShadow: "4px 4px 0 0 #000", outline: "none", fontWeight: "600" }}
+                                                style={{ width: "100%", padding: "0.6rem", border: "var(--border-ui)", borderRadius: "6px", boxShadow: "var(--shadow-md)", outline: "none", fontWeight: "600" }}
                                             />
                                         </div>
                                         <div>
@@ -762,7 +762,7 @@ export default function MembersPage() {
                                                 type="email"
                                                 value={formData.guardian2Email}
                                                 onChange={e => setFormData({ ...formData, guardian2Email: e.target.value })}
-                                                style={{ width: "100%", padding: "0.6rem", border: "2px solid #000", borderRadius: "6px", boxShadow: "4px 4px 0 0 #000", outline: "none", fontWeight: "600" }}
+                                                style={{ width: "100%", padding: "0.6rem", border: "var(--border-ui)", borderRadius: "6px", boxShadow: "var(--shadow-md)", outline: "none", fontWeight: "600" }}
                                             />
                                         </div>
                                     </div>
@@ -775,7 +775,7 @@ export default function MembersPage() {
                                 <input
                                     value={formData.address}
                                     onChange={e => setFormData({ ...formData, address: e.target.value })}
-                                    style={{ width: "100%", padding: "0.6rem", border: "2px solid #000", borderRadius: "6px", boxShadow: "4px 4px 0 0 #000", outline: "none", fontWeight: "600" }}
+                                    style={{ width: "100%", padding: "0.6rem", border: "var(--border-ui)", borderRadius: "6px", boxShadow: "var(--shadow-md)", outline: "none", fontWeight: "600" }}
                                     placeholder="Ulice, číslo, město"
                                 />
                             </div>
@@ -789,9 +789,9 @@ export default function MembersPage() {
                                     color: "black",
                                     padding: "0.75rem",
                                     borderRadius: "6px",
-                                    border: "2px solid #000",
+                                    border: "var(--border-ui)",
                                     fontWeight: "900",
-                                    boxShadow: "4px 4px 0 0 #000",
+                                    boxShadow: "var(--shadow-md)",
                                     cursor: "pointer",
                                     fontSize: "1.1rem"
                                 }}
@@ -807,9 +807,9 @@ export default function MembersPage() {
                 <ModalShell className={styles.memberDialog} width="1000px" aria-label="Import členů" onClose={isImporting ? undefined : () => setShowImportModal(false)} style={{
                         backgroundColor: "white",
                         padding: "clamp(1rem, 4vw, 2rem)",
-                        border: "3px solid #000",
+                        border: "var(--border-ui)",
                         borderRadius: "16px",
-                        boxShadow: "8px 8px 0 0 #000",
+                        boxShadow: "var(--shadow-md)",
                         width: "95%",
                         maxWidth: "1000px",
                         maxHeight: "calc(100dvh - 2rem)",
@@ -847,7 +847,7 @@ export default function MembersPage() {
                                             <select
                                                 value={importMapping[field.key]}
                                                 onChange={(e) => setImportMapping({ ...importMapping, [field.key]: e.target.value })}
-                                                style={{ width: "100%", padding: "0.5rem", border: "2px solid #000", borderRadius: "6px", boxShadow: "3px 3px 0 0 #000", outline: "none", fontWeight: "600", fontSize: "0.9rem" }}
+                                                style={{ width: "100%", padding: "0.5rem", border: "var(--border-ui)", borderRadius: "6px", boxShadow: "var(--shadow-md)", outline: "none", fontWeight: "600", fontSize: "0.9rem" }}
                                             >
                                                 <option value="">— Neimportovat —</option>
                                                 {importHeaders.map(h => (
@@ -873,7 +873,7 @@ export default function MembersPage() {
                                             <select
                                                 value={importMapping[field.key]}
                                                 onChange={(e) => setImportMapping({ ...importMapping, [field.key]: e.target.value })}
-                                                style={{ width: "100%", padding: "0.5rem", border: "2px solid #000", borderRadius: "6px", boxShadow: "3px 3px 0 0 #000", outline: "none", fontWeight: "600", fontSize: "0.9rem" }}
+                                                style={{ width: "100%", padding: "0.5rem", border: "var(--border-ui)", borderRadius: "6px", boxShadow: "var(--shadow-md)", outline: "none", fontWeight: "600", fontSize: "0.9rem" }}
                                             >
                                                 <option value="">— Neimportovat —</option>
                                                 {importHeaders.map(h => (
@@ -902,7 +902,7 @@ export default function MembersPage() {
                                             <select
                                                 value={importMapping[field.key]}
                                                 onChange={(e) => setImportMapping({ ...importMapping, [field.key]: e.target.value })}
-                                                style={{ width: "100%", padding: "0.5rem", border: "2px solid #000", borderRadius: "6px", boxShadow: "3px 3px 0 0 #000", outline: "none", fontWeight: "600", fontSize: "0.9rem" }}
+                                                style={{ width: "100%", padding: "0.5rem", border: "var(--border-ui)", borderRadius: "6px", boxShadow: "var(--shadow-md)", outline: "none", fontWeight: "600", fontSize: "0.9rem" }}
                                             >
                                                 <option value="">— Neimportovat —</option>
                                                 {importHeaders.map(h => (
@@ -930,7 +930,7 @@ export default function MembersPage() {
                                         <div
                                             key={idx}
                                             style={{
-                                                border: "2px solid #000",
+                                                border: "var(--border-ui)",
                                                 borderRadius: "8px",
                                                 padding: "1rem",
                                                 backgroundColor: "#f9fafb",
@@ -1057,9 +1057,9 @@ export default function MembersPage() {
                                     color: "black",
                                     padding: "0.6rem 1rem",
                                     borderRadius: "6px",
-                                    border: "2px solid #000",
+                                    border: "var(--border-ui)",
                                     fontWeight: "900",
-                                    boxShadow: "4px 4px 0 0 #000",
+                                    boxShadow: "var(--shadow-md)",
                                     cursor: "pointer"
                                 }}
                             >
@@ -1073,9 +1073,9 @@ export default function MembersPage() {
                                     color: "black",
                                     padding: "0.6rem 1rem",
                                     borderRadius: "6px",
-                                    border: "2px solid #000",
+                                    border: "var(--border-ui)",
                                     fontWeight: "900",
-                                    boxShadow: "4px 4px 0 0 #000",
+                                    boxShadow: "var(--shadow-md)",
                                     cursor: "pointer"
                                 }}
                             >
@@ -1091,7 +1091,7 @@ export default function MembersPage() {
                         backgroundColor: "white",
                         border: "2px solid var(--border-color)",
                         borderRadius: "8px",
-                        boxShadow: "6px 6px 0 0 #000",
+                        boxShadow: "var(--shadow-md)",
                         padding: "2rem",
                         maxWidth: "600px",
                         width: "100%",
@@ -1218,9 +1218,9 @@ export default function MembersPage() {
                                 color: "#000",
                                 padding: "0.8rem 1rem",
                                 borderRadius: "6px",
-                                border: "2px solid #000",
+                                border: "var(--border-ui)",
                                 fontWeight: "900",
-                                boxShadow: "4px 4px 0 0 #000",
+                                boxShadow: "var(--shadow-md)",
                                 cursor: "pointer",
                                 marginTop: "0.5rem"
                             }}
@@ -1235,9 +1235,9 @@ export default function MembersPage() {
                 <ModalShell className={styles.memberDialog} width="800px" aria-label="Import z Google Groups" onClose={() => setShowGoogleGroupsCSVModal(false)} style={{
                         backgroundColor: "white",
                         padding: "clamp(1rem, 4vw, 2rem)",
-                        border: "3px solid #000",
+                        border: "var(--border-ui)",
                         borderRadius: "16px",
-                        boxShadow: "8px 8px 0 0 #000",
+                        boxShadow: "var(--shadow-md)",
                         width: "95%",
                         maxWidth: "800px",
                         maxHeight: "calc(100dvh - 2rem)",
@@ -1455,7 +1455,7 @@ export default function MembersPage() {
                                                         }}
                                                         style={{
                                                             padding: "0.5rem",
-                                                            border: "2px solid #000",
+                                                            border: "var(--border-ui)",
                                                             borderRadius: "6px",
                                                             fontSize: "0.85rem",
                                                             fontWeight: "600",
@@ -1546,12 +1546,12 @@ export default function MembersPage() {
                                         style={{
                                             padding: "0.9rem",
                                             backgroundColor: "#e5e7eb",
-                                            border: "3px solid #000",
+                                            border: "var(--border-ui)",
                                             borderRadius: "10px",
                                             fontWeight: "900",
                                             fontSize: "0.95rem",
                                             cursor: "pointer",
-                                            boxShadow: "3px 3px 0 0 #000"
+                                            boxShadow: "var(--shadow-md)"
                                         }}
                                     >
                                         Zrušit
@@ -1563,12 +1563,12 @@ export default function MembersPage() {
                                             padding: "0.9rem",
                                             backgroundColor: (googleGroupsCSVLoading || (Object.values(googleGroupsCSVEmailsToUpdate).filter(Boolean).length === 0 && Object.values(googleGroupsCSVManualAssignments).filter(v => v && v !== "").length === 0)) ? "#e5e7eb" : "#86efac",
                                             color: (googleGroupsCSVLoading || (Object.values(googleGroupsCSVEmailsToUpdate).filter(Boolean).length === 0 && Object.values(googleGroupsCSVManualAssignments).filter(v => v && v !== "").length === 0)) ? "#9ca3af" : "#000",
-                                            border: "3px solid #000",
+                                            border: "var(--border-ui)",
                                             borderRadius: "10px",
                                             fontWeight: "900",
                                             fontSize: "0.95rem",
                                             cursor: (googleGroupsCSVLoading || (Object.values(googleGroupsCSVEmailsToUpdate).filter(Boolean).length === 0 && Object.values(googleGroupsCSVManualAssignments).filter(v => v && v !== "").length === 0)) ? "not-allowed" : "pointer",
-                                            boxShadow: "3px 3px 0 0 #000"
+                                            boxShadow: "var(--shadow-md)"
                                         }}
                                     >
                                         {googleGroupsCSVLoading ? "Aktualizuji..." : `Aktualizovat (${Object.values(googleGroupsCSVEmailsToUpdate).filter(Boolean).length + Object.values(googleGroupsCSVManualAssignments).filter(v => v && v !== "").length})`}

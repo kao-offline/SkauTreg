@@ -54,7 +54,7 @@
     place-items: center;
     color: var(--color-primary-text);
     background: var(--color-primary);
-    border: 2px solid #000;
+    border: var(--border-ui);
     border-radius: 50%;
     cursor: pointer;
 }
@@ -151,7 +151,7 @@
 
 .roleList { display: grid; gap: .55rem; }
 .roleCard { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .65rem; padding: .65rem .75rem; background: #fff; border: var(--border-ui); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); }
-.roleIcon { width: 35px; height: 35px; display: grid; place-items: center; color: var(--color-primary-text); background: var(--color-primary); border: 2px solid #000; border-radius: 7px; }
+.roleIcon { width: 35px; height: 35px; display: grid; place-items: center; color: var(--color-primary-text); background: var(--color-primary); border: var(--border-ui); border-radius: 7px; }
 .roleCard > div:nth-child(2) { min-width: 0; display: grid; gap: .12rem; }
 .roleCard strong { overflow: hidden; font-size: .77rem; text-overflow: ellipsis; white-space: nowrap; }
 .roleCard span { color: var(--text-muted); font-size: .62rem; }

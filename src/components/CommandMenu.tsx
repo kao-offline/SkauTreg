@@ -115,19 +115,19 @@ export function CommandMenu() {
                         display: "flex",
                         flexDirection: "column",
                         background: "white",
-                        border: "3px solid #000",
+                        border: "var(--border-ui)",
                         borderRadius: 12,
-                        boxShadow: "8px 8px 0 #000",
+                        boxShadow: "var(--shadow-md)",
                     }}
                 >
-                    <div style={{ display: "flex", alignItems: "center", gap: ".75rem", padding: "1rem", borderBottom: "3px solid #000" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: ".75rem", padding: "1rem", borderBottom: "var(--border-ui)" }}>
                         <Search size={22} strokeWidth={2.6} aria-hidden="true" />
                         <Command.Input
                             autoFocus
                             placeholder="Stránky, oddíly, výpravy, záložky, členové, základny…"
                             style={{ width: "100%", border: 0, outline: 0, fontSize: "1.1rem", fontWeight: 650, background: "transparent" }}
                         />
-                        <kbd style={{ padding: ".2rem .45rem", border: "2px solid #000", borderRadius: 5, background: "#f5f5f5", fontWeight: 800 }}>Esc</kbd>
+                        <kbd style={{ padding: ".2rem .45rem", border: "var(--border-ui)", borderRadius: 5, background: "#f5f5f5", fontWeight: 800 }}>Esc</kbd>
                     </div>
 
                     <Command.List style={{ maxHeight: "min(62vh, 560px)", overflowY: "auto", padding: ".5rem" }}>

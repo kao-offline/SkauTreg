@@ -1,16 +1,16 @@
 .overlay { position: fixed; inset: 0; z-index: 2500; display: grid; place-items: center; padding: 1rem; background: rgb(0 0 0 / 62%); backdrop-filter: blur(4px); }
-.modal { width: min(760px, 100%); max-height: min(760px, calc(100dvh - 2rem)); overflow: hidden; background: #fff; border: 2px solid #111; border-radius: 16px; box-shadow: 7px 7px 0 #111; }
-.header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.15rem; background: #edf4ef; border-bottom: 2px solid #111; }
+.modal { width: min(760px, 100%); max-height: min(760px, calc(100dvh - 2rem)); overflow: hidden; background: #fff; border: var(--border-ui); border-radius: 16px; box-shadow: var(--shadow-md); }
+.header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.15rem; background: #edf4ef; border-bottom: var(--border-ui); }
 .header span { color: #55705d; font-size: .66rem; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
 .header h2 { margin: .15rem 0 0; font-size: 1.25rem; }
-.header > button { display: grid; place-items: center; width: 38px; height: 38px; background: #fff; border: 2px solid #111; border-radius: 9px; cursor: pointer; }
+.header > button { display: grid; place-items: center; width: 38px; height: 38px; background: #fff; border: var(--border-ui); border-radius: 9px; cursor: pointer; }
 .body { display: grid; gap: .8rem; max-height: calc(100dvh - 105px); overflow-y: auto; padding: 1rem 1.15rem 1.25rem; }
 .card { padding: .9rem; background: #f7f8f7; border: 1px solid #cdd2ce; border-radius: 10px; }
 .card h3, .assigned h3 { margin: 0 0 .7rem; font-size: .86rem; }
 .addRow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .6rem; }
-.modal input, .modal select { width: 100%; min-height: 40px; padding: .55rem .65rem; color: #171917; background: #fff; border: 2px solid #111; border-radius: 8px; font: inherit; font-size: .78rem; font-weight: 650; }
+.modal input, .modal select { width: 100%; min-height: 40px; padding: .55rem .65rem; color: #171917; background: #fff; border: var(--border-ui); border-radius: 8px; font: inherit; font-size: .78rem; font-weight: 650; }
 .modal input:focus, .modal select:focus, .modal button:focus-visible { outline: 3px solid #315f3f; outline-offset: 2px; }
-.primary { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; min-height: 40px; padding: .55rem .85rem; color: #fff; background: #315f3f; border: 2px solid #111; border-radius: 8px; box-shadow: 2px 2px 0 #111; font-weight: 850; cursor: pointer; }
+.primary { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; min-height: 40px; padding: .55rem .85rem; color: #fff; background: #315f3f; border: var(--border-ui); border-radius: 8px; box-shadow: var(--shadow-md); font-weight: 850; cursor: pointer; }
 .primary:disabled { cursor: not-allowed; opacity: .45; box-shadow: none; }
 .hint, .empty { margin: .65rem 0 0; color: #6b716d; font-size: .72rem; }
 .externalGrid { display: grid; grid-template-columns: 1.4fr .8fr .55fr 1fr; gap: .6rem; }
@@ -20,7 +20,7 @@
 .externalActions input { width: 17px; min-height: 17px; accent-color: #315f3f; }
 .chips { display: flex; flex-wrap: wrap; gap: .45rem; }
 .chips > div { display: flex; }
-.chips button { min-height: 34px; padding: .35rem .65rem; background: #fff; border: 2px solid #111; font-size: .7rem; font-weight: 750; cursor: pointer; }
+.chips button { min-height: 34px; padding: .35rem .65rem; background: #fff; border: var(--border-ui); font-size: .7rem; font-weight: 750; cursor: pointer; }
 .chips button:first-child { border-radius: 999px 0 0 999px; }
 .chips button:last-child { display: grid; place-items: center; padding-inline: .45rem; color: #922; background: #fff1f1; border-left: 0; border-radius: 0 999px 999px 0; }
 .assigned { padding-top: .2rem; }

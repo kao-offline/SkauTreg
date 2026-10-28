@@ -192,7 +192,7 @@ export default function TripsPage() {
                                                 marginTop: "0.75rem",
                                                 padding: "0.5rem 0.75rem",
                                                 backgroundColor: "#E3F2FD",
-                                                border: "2px solid #000",
+                                                border: "var(--border-ui)",
                                                 borderRadius: "8px",
                                                 fontSize: "0.85rem",
                                                 fontWeight: "700",
@@ -208,7 +208,7 @@ export default function TripsPage() {
                                     <div style={{
                                         marginTop: "1.5rem",
                                         paddingTop: "1rem",
-                                        borderTop: "2px solid #000",
+                                        borderTop: "var(--border-ui)",
                                         fontWeight: "600",
                                         display: "flex",
                                         justifyContent: "space-between"

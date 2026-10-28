@@ -434,6 +434,7 @@ export default function TripDashboardPage() {
 
                 <div className={workspaceStyles.railActions}>
                     <span>Správa výpravy</span>
+                    <button onClick={() => window.dispatchEvent(new Event("skautreg:open-privacy"))}>Soukromí</button>
                     <button className={workspaceStyles.deleteAction} onClick={handleDelete}><Trash2 size={16} /> Smazat</button>
                 </div>
             </aside>
@@ -501,10 +502,10 @@ export default function TripDashboardPage() {
                             {/* Info Card - Two Column Layout */}
                             <div style={{
                                 backgroundColor: "#FFF9E6",
-                                border: "3px solid #000",
+                                border: "var(--border-ui)",
                                 borderRadius: "12px",
                                 padding: "2rem",
-                                boxShadow: "6px 6px 0 0 #000"
+                                boxShadow: "var(--shadow-md)"
                             }}>
                                 <h2 style={{ fontSize: "1.8rem", fontWeight: "900", marginBottom: "1.5rem", textTransform: "uppercase" }}>
                                     Informace o výpravě
@@ -520,10 +521,10 @@ export default function TripDashboardPage() {
                                     {/* Location Card */}
                                     <div style={{
                                         backgroundColor: "white",
-                                        border: "2px solid #000",
+                                        border: "var(--border-ui)",
                                         borderRadius: "8px",
                                         padding: "1.2rem",
-                                        boxShadow: "3px 3px 0 0 #000"
+                                        boxShadow: "var(--shadow-md)"
                                     }}>
                                         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
                                             <img src="/place-icon.svg" alt="Location" style={{ width: "28px", height: "28px" }} />
@@ -535,10 +536,10 @@ export default function TripDashboardPage() {
                                     {/* Date Card */}
                                     <div style={{
                                         backgroundColor: "white",
-                                        border: "2px solid #000",
+                                        border: "var(--border-ui)",
                                         borderRadius: "8px",
                                         padding: "1.2rem",
-                                        boxShadow: "3px 3px 0 0 #000"
+                                        boxShadow: "var(--shadow-md)"
                                     }}>
                                         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
                                             <img src="/clock-time-icon.svg" alt="Time" style={{ width: "28px", height: "28px" }} />
@@ -561,10 +562,10 @@ export default function TripDashboardPage() {
                                 {trip.description && (
                                     <div style={{
                                         backgroundColor: "white",
-                                        border: "2px solid #000",
+                                        border: "var(--border-ui)",
                                         borderRadius: "8px",
                                         padding: "1.2rem",
-                                        boxShadow: "3px 3px 0 0 #000"
+                                        boxShadow: "var(--shadow-md)"
                                     }}>
                                         <div style={{ fontSize: "0.9rem", fontWeight: "900", textTransform: "uppercase", marginBottom: "0.75rem" }}>
                                             Popis
@@ -582,10 +583,10 @@ export default function TripDashboardPage() {
                             }}>
                                 <div style={{
                                     backgroundColor: "white",
-                                    border: "2px solid #000",
+                                    border: "var(--border-ui)",
                                     borderRadius: "8px",
                                     padding: "0.85rem 1rem",
-                                    boxShadow: "2px 2px 0 0 #000"
+                                    boxShadow: "var(--shadow-md)"
                                 }}>
                                     <div style={{ fontSize: "0.8rem", fontWeight: "900", textTransform: "uppercase", marginBottom: "0.4rem" }}>
                                         Účast
@@ -598,10 +599,10 @@ export default function TripDashboardPage() {
 
                                 <div style={{
                                     backgroundColor: "white",
-                                    border: "2px solid #000",
+                                    border: "var(--border-ui)",
                                     borderRadius: "8px",
                                     padding: "0.85rem 1rem",
-                                    boxShadow: "2px 2px 0 0 #000"
+                                    boxShadow: "var(--shadow-md)"
                                 }}>
                                     <div style={{ fontSize: "0.8rem", fontWeight: "900", textTransform: "uppercase", marginBottom: "0.4rem" }}>
                                         Přihláška a kontakty
@@ -614,10 +615,10 @@ export default function TripDashboardPage() {
 
                                 <div style={{
                                     backgroundColor: "white",
-                                    border: "2px solid #000",
+                                    border: "var(--border-ui)",
                                     borderRadius: "8px",
                                     padding: "0.85rem 1rem",
-                                    boxShadow: "2px 2px 0 0 #000"
+                                    boxShadow: "var(--shadow-md)"
                                 }}>
                                     <div style={{ fontSize: "0.8rem", fontWeight: "900", textTransform: "uppercase", marginBottom: "0.4rem" }}>
                                         Lhůty a základna
@@ -637,10 +638,10 @@ export default function TripDashboardPage() {
 
                         <div style={{
                             backgroundColor: "white",
-                            border: "2px solid #000",
+                            border: "var(--border-ui)",
                             borderRadius: "10px",
                             padding: "0.9rem",
-                            boxShadow: "2px 2px 0 0 #000",
+                            boxShadow: "var(--shadow-md)",
                             position: "sticky",
                             top: "1rem"
                         }}>
@@ -652,7 +653,7 @@ export default function TripDashboardPage() {
                                         onClick={() => setIsStaffModalOpen(true)}
                                         style={{
                                             padding: "6px 10px",
-                                            border: "2px solid #000",
+                                            border: "var(--border-ui)",
                                             borderRadius: "8px",
                                             backgroundColor: "#86efac",
                                             fontWeight: "900",
@@ -675,7 +676,7 @@ export default function TripDashboardPage() {
                                             alignItems: "center",
                                             justifyContent: "space-between",
                                             gap: "0.4rem",
-                                            border: "2px solid #000",
+                                            border: "var(--border-ui)",
                                             borderRadius: "8px",
                                             padding: "0.45rem 0.6rem",
                                             backgroundColor: "#f9fafb"
@@ -684,7 +685,7 @@ export default function TripDashboardPage() {
                                                 <div style={{ fontWeight: "800" }}>{s.user?.name || s.name}</div>
                                                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", alignItems: "center" }}>
                                                     <span style={{
-                                                        border: "2px solid #000",
+                                                        border: "var(--border-ui)",
                                                         borderRadius: "999px",
                                                         padding: "0 6px",
                                                         fontSize: "0.7rem",
@@ -702,7 +703,7 @@ export default function TripDashboardPage() {
                                                     await removeTripStaff({ tripStaffId: s._id });
                                                 }}
                                                 style={{
-                                                    border: "2px solid #000",
+                                                    border: "var(--border-ui)",
                                                     borderRadius: "6px",
                                                     backgroundColor: "#fee2e2",
                                                     fontWeight: "900",
@@ -737,9 +738,9 @@ export default function TripDashboardPage() {
                             <div
                                 style={{
                                     backgroundColor: "white",
-                                    border: "3px solid #000",
+                                    border: "var(--border-ui)",
                                     borderRadius: "16px",
-                                    boxShadow: "8px 8px 0 0 #000",
+                                    boxShadow: "var(--shadow-md)",
                                     width: "100%",
                                     maxWidth: "900px",
                                     maxHeight: "85vh",
@@ -753,7 +754,7 @@ export default function TripDashboardPage() {
                                     <button
                                         onClick={() => setIsStaffModalOpen(false)}
                                         style={{
-                                            border: "3px solid #000",
+                                            border: "var(--border-ui)",
                                             borderRadius: "10px",
                                             padding: "0.4rem 0.8rem",
                                             fontWeight: "900",
@@ -766,11 +767,11 @@ export default function TripDashboardPage() {
                                 </div>
 
                                 <div style={{
-                                    border: "2px solid #000",
+                                    border: "var(--border-ui)",
                                     borderRadius: "12px",
                                     padding: "1rem",
                                     backgroundColor: "#f0fdf4",
-                                    boxShadow: "3px 3px 0 0 #000",
+                                    boxShadow: "var(--shadow-md)",
                                     marginBottom: "1rem"
                                 }}>
                                     <div style={{ fontWeight: "900", marginBottom: "0.6rem" }}>Přidat z týmu</div>
@@ -778,7 +779,7 @@ export default function TripDashboardPage() {
                                         <select
                                             value={selectedLeaderId}
                                             onChange={(e) => setSelectedLeaderId(e.target.value)}
-                                            style={{ padding: "10px 12px", border: "2px solid #000", borderRadius: "10px", fontWeight: "800" }}
+                                            style={{ padding: "10px 12px", border: "var(--border-ui)", borderRadius: "10px", fontWeight: "800" }}
                                         >
                                             <option value="">Vyber vedoucího/rovera…</option>
                                             {dashboard.leaders?.map((l: any) => (
@@ -791,7 +792,7 @@ export default function TripDashboardPage() {
                                             onClick={handleAddLeaderFromTeam}
                                             style={{
                                                 padding: "10px 14px",
-                                                border: "2px solid #000",
+                                                border: "var(--border-ui)",
                                                 borderRadius: "10px",
                                                 backgroundColor: "#86efac",
                                                 fontWeight: "900",
@@ -804,11 +805,11 @@ export default function TripDashboardPage() {
                                 </div>
 
                                 <div style={{
-                                    border: "2px solid #000",
+                                    border: "var(--border-ui)",
                                     borderRadius: "12px",
                                     padding: "1rem",
                                     backgroundColor: "#fff7ed",
-                                    boxShadow: "3px 3px 0 0 #000",
+                                    boxShadow: "var(--shadow-md)",
                                     marginBottom: "1rem"
                                 }}>
                                     <div style={{ fontWeight: "900", marginBottom: "0.6rem" }}>Přidat externího</div>
@@ -817,19 +818,19 @@ export default function TripDashboardPage() {
                                             value={externalName}
                                             onChange={(e) => setExternalName(e.target.value)}
                                             placeholder="Externí jméno"
-                                            style={{ padding: "10px 12px", border: "2px solid #000", borderRadius: "10px", fontWeight: "800" }}
+                                            style={{ padding: "10px 12px", border: "var(--border-ui)", borderRadius: "10px", fontWeight: "800" }}
                                         />
                                         <input
                                             value={externalAge}
                                             onChange={(e) => setExternalAge(e.target.value)}
                                             placeholder="Věk"
                                             inputMode="numeric"
-                                            style={{ padding: "10px 12px", border: "2px solid #000", borderRadius: "10px", fontWeight: "800" }}
+                                            style={{ padding: "10px 12px", border: "var(--border-ui)", borderRadius: "10px", fontWeight: "800" }}
                                         />
                                         <select
                                             value={externalBenefit}
                                             onChange={(e) => setExternalBenefit(e.target.value)}
-                                            style={{ padding: "10px 12px", border: "2px solid #000", borderRadius: "10px", fontWeight: "800" }}
+                                            style={{ padding: "10px 12px", border: "var(--border-ui)", borderRadius: "10px", fontWeight: "800" }}
                                         >
                                             <option value="">Benefit</option>
                                             {BENEFIT_OPTIONS.map((b) => (
@@ -839,7 +840,7 @@ export default function TripDashboardPage() {
                                         <select
                                             value={externalRole}
                                             onChange={(e) => setExternalRole(e.target.value as "leader" | "rover")}
-                                            style={{ padding: "10px 12px", border: "2px solid #000", borderRadius: "10px", fontWeight: "800" }}
+                                            style={{ padding: "10px 12px", border: "var(--border-ui)", borderRadius: "10px", fontWeight: "800" }}
                                         >
                                             <option value="leader">Vedoucí</option>
                                             <option value="rover">Rover</option>
@@ -859,7 +860,7 @@ export default function TripDashboardPage() {
                                             onClick={handleAddExternal}
                                             style={{
                                                 padding: "10px 14px",
-                                                border: "2px solid #000",
+                                                border: "var(--border-ui)",
                                                 borderRadius: "10px",
                                                 backgroundColor: "#fde047",
                                                 fontWeight: "900",
@@ -873,11 +874,11 @@ export default function TripDashboardPage() {
 
                                 {leaderPresets.length > 0 && (
                                     <div style={{
-                                        border: "2px solid #000",
+                                        border: "var(--border-ui)",
                                         borderRadius: "12px",
                                         padding: "0.8rem",
                                         backgroundColor: "#f8fafc",
-                                        boxShadow: "3px 3px 0 0 #000"
+                                        boxShadow: "var(--shadow-md)"
                                     }}>
                                         <div style={{ fontWeight: "900", marginBottom: "0.5rem" }}>Presety</div>
                                         <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
@@ -887,7 +888,7 @@ export default function TripDashboardPage() {
                                                         onClick={() => handleAddFromPreset(p._id)}
                                                         style={{
                                                             padding: "6px 10px",
-                                                            border: "2px solid #000",
+                                                            border: "var(--border-ui)",
                                                             borderRadius: "999px",
                                                             backgroundColor: "#f4f4f5",
                                                             fontWeight: "800",
@@ -903,7 +904,7 @@ export default function TripDashboardPage() {
                                                         }}
                                                         title="Smazat preset"
                                                         style={{
-                                                            border: "2px solid #000",
+                                                            border: "var(--border-ui)",
                                                             borderRadius: "999px",
                                                             backgroundColor: "#fee2e2",
                                                             fontWeight: "900",
@@ -930,10 +931,10 @@ export default function TripDashboardPage() {
                     {base ? (
                         <div style={{
                             backgroundColor: "#E3F2FD",
-                            border: "3px solid #000",
+                            border: "var(--border-ui)",
                             borderRadius: "12px",
                             padding: "2rem",
-                            boxShadow: "6px 6px 0 0 #000",
+                            boxShadow: "var(--shadow-md)",
                             marginBottom: "2rem"
                         }}>
                             {/* Header with Unassign Button */}
@@ -950,11 +951,11 @@ export default function TripDashboardPage() {
                                     style={{
                                         padding: "0.75rem 1.25rem",
                                         backgroundColor: "#fca5a5",
-                                        border: "3px solid #000",
+                                        border: "var(--border-ui)",
                                         borderRadius: "8px",
                                         fontWeight: "900",
                                         cursor: "pointer",
-                                        boxShadow: "4px 4px 0 0 #000",
+                                        boxShadow: "var(--shadow-md)",
                                         fontSize: "0.95rem",
                                         textTransform: "uppercase"
                                     }}
@@ -978,9 +979,9 @@ export default function TripDashboardPage() {
                                                 width: "100%",
                                                 height: "350px",
                                                 borderRadius: "8px",
-                                                border: "3px solid #000",
+                                                border: "var(--border-ui)",
                                                 overflow: "hidden",
-                                                boxShadow: "4px 4px 0 0 #000",
+                                                boxShadow: "var(--shadow-md)",
                                                 marginBottom: "0.75rem",
                                                 backgroundColor: "white"
                                             }}>
@@ -997,10 +998,10 @@ export default function TripDashboardPage() {
                                                             width: "70px",
                                                             height: "70px",
                                                             borderRadius: "6px",
-                                                            border: "3px solid #000",
+                                                            border: "var(--border-ui)",
                                                             overflow: "hidden",
                                                             cursor: "pointer",
-                                                            boxShadow: "2px 2px 0 0 #000"
+                                                            boxShadow: "var(--shadow-md)"
                                                         }}>
                                                             <img src={photo.url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                                                         </div>
@@ -1016,10 +1017,10 @@ export default function TripDashboardPage() {
                                     {base.location?.city && (
                                         <div style={{
                                             backgroundColor: "white",
-                                            border: "3px solid #000",
+                                            border: "var(--border-ui)",
                                             borderRadius: "8px",
                                             padding: "1rem",
-                                            boxShadow: "3px 3px 0 0 #000"
+                                            boxShadow: "var(--shadow-md)"
                                         }}>
                                             <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "#666", marginBottom: "0.5rem", textTransform: "uppercase" }}>
                                                 <img src="/place-icon.svg" alt="" style={{ width: "18px", height: "18px", verticalAlign: "middle", marginRight: "0.5rem" }} />
@@ -1031,10 +1032,10 @@ export default function TripDashboardPage() {
                                     {base.capacity && (
                                         <div style={{
                                             backgroundColor: "white",
-                                            border: "3px solid #000",
+                                            border: "var(--border-ui)",
                                             borderRadius: "8px",
                                             padding: "1rem",
-                                            boxShadow: "3px 3px 0 0 #000"
+                                            boxShadow: "var(--shadow-md)"
                                         }}>
                                             <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "#666", marginBottom: "0.5rem", textTransform: "uppercase" }}>Kapacita</div>
                                             <div style={{ fontSize: "1.2rem", fontWeight: "900" }}>{base.capacity} osob</div>
@@ -1043,10 +1044,10 @@ export default function TripDashboardPage() {
                                     {base.pricing?.priceType && (
                                         <div style={{
                                             backgroundColor: "white",
-                                            border: "3px solid #000",
+                                            border: "var(--border-ui)",
                                             borderRadius: "8px",
                                             padding: "1rem",
-                                            boxShadow: "3px 3px 0 0 #000"
+                                            boxShadow: "var(--shadow-md)"
                                         }}>
                                             <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "#666", marginBottom: "0.5rem", textTransform: "uppercase" }}>Cena</div>
                                             <div style={{ fontSize: "1.2rem", fontWeight: "900" }}>
@@ -1069,10 +1070,10 @@ export default function TripDashboardPage() {
                                 {base.conditions?.specialNotes && (
                                     <div style={{
                                         backgroundColor: "white",
-                                        border: "3px solid #000",
+                                        border: "var(--border-ui)",
                                         borderRadius: "8px",
                                         padding: "1.2rem",
-                                        boxShadow: "3px 3px 0 0 #000"
+                                        boxShadow: "var(--shadow-md)"
                                     }}>
                                         <div style={{ fontSize: "0.95rem", fontWeight: "900", textTransform: "uppercase", marginBottom: "0.75rem" }}>
                                             Podmínky
@@ -1087,10 +1088,10 @@ export default function TripDashboardPage() {
                                 {base.contacts && base.contacts.length > 0 && (
                                     <div style={{
                                         backgroundColor: "white",
-                                        border: "3px solid #000",
+                                        border: "var(--border-ui)",
                                         borderRadius: "8px",
                                         padding: "1.2rem",
-                                        boxShadow: "3px 3px 0 0 #000"
+                                        boxShadow: "var(--shadow-md)"
                                     }}>
                                         <div style={{ fontSize: "0.95rem", fontWeight: "900", textTransform: "uppercase", marginBottom: "0.75rem" }}>
                                             Kontakt
@@ -1153,11 +1154,11 @@ export default function TripDashboardPage() {
                             {base.amenities?.equipment && base.amenities.equipment.length > 0 && (
                                 <div style={{
                                     backgroundColor: "white",
-                                    border: "3px solid #000",
+                                    border: "var(--border-ui)",
                                     borderRadius: "8px",
                                     padding: "1.2rem",
                                     marginBottom: "1.5rem",
-                                    boxShadow: "3px 3px 0 0 #000"
+                                    boxShadow: "var(--shadow-md)"
                                 }}>
                                     <div style={{ fontSize: "0.95rem", fontWeight: "900", textTransform: "uppercase", marginBottom: "0.75rem" }}>
                                         Vybavení
@@ -1166,12 +1167,12 @@ export default function TripDashboardPage() {
                                         {base.amenities.equipment.map((item, idx) => (
                                             <span key={idx} style={{
                                                 backgroundColor: "#dbeafe",
-                                                border: "2px solid #000",
+                                                border: "var(--border-ui)",
                                                 borderRadius: "6px",
                                                 padding: "0.5rem 1rem",
                                                 fontSize: "0.9rem",
                                                 fontWeight: "700",
-                                                boxShadow: "2px 2px 0 0 #000"
+                                                boxShadow: "var(--shadow-md)"
                                             }}>
                                                 {item}
                                             </span>
@@ -1191,12 +1192,12 @@ export default function TripDashboardPage() {
                                             style={{
                                                 padding: "0.75rem 1.5rem",
                                                 backgroundColor: "#86efac",
-                                                border: "3px solid #000",
+                                                border: "var(--border-ui)",
                                                 borderRadius: "8px",
                                                 fontWeight: "900",
                                                 textDecoration: "none",
                                                 color: "#000",
-                                                boxShadow: "4px 4px 0 0 #000",
+                                                boxShadow: "var(--shadow-md)",
                                                 fontSize: "1rem",
                                                 display: "inline-flex",
                                                 alignItems: "center",
@@ -1215,12 +1216,12 @@ export default function TripDashboardPage() {
                                             style={{
                                                 padding: "0.75rem 1.5rem",
                                                 backgroundColor: "white",
-                                                border: "3px solid #000",
+                                                border: "var(--border-ui)",
                                                 borderRadius: "8px",
                                                 fontWeight: "900",
                                                 textDecoration: "none",
                                                 color: "#000",
-                                                boxShadow: "4px 4px 0 0 #000",
+                                                boxShadow: "var(--shadow-md)",
                                                 fontSize: "1rem",
                                                 display: "inline-flex",
                                                 alignItems: "center",
@@ -1239,10 +1240,10 @@ export default function TripDashboardPage() {
                     ) : (
                         <div style={{
                             backgroundColor: "#fff3cd",
-                            border: "3px solid #000",
+                            border: "var(--border-ui)",
                             borderRadius: "12px",
                             padding: "2rem",
-                            boxShadow: "6px 6px 0 0 #000",
+                            boxShadow: "var(--shadow-md)",
                             textAlign: "center",
                             marginBottom: "2rem"
                         }}>
@@ -1274,14 +1275,14 @@ export default function TripDashboardPage() {
 
                     <div style={{
                         overflowX: "auto",
-                        border: "3px solid #000",
+                        border: "var(--border-ui)",
                         borderRadius: "12px",
-                        boxShadow: "6px 6px 0 0 #000",
+                        boxShadow: "var(--shadow-md)",
                         backgroundColor: "white",
                         WebkitOverflowScrolling: "touch"
                     }}>
                         <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "600px" }}>
-                            <thead style={{ backgroundColor: "#86efac", borderBottom: "3px solid #000" }}>
+                            <thead style={{ backgroundColor: "#86efac", borderBottom: "var(--border-ui)" }}>
                                 <tr>
                                     <th style={thStyle}>Skaut</th>
                                     <th style={thStyle}>Stav</th>
@@ -1293,23 +1294,23 @@ export default function TripDashboardPage() {
                             </thead>
                             <tbody>
                                 {validParticipants.map((p, index) => (
-                                    <tr key={p._id} style={{ borderBottom: index === validParticipants.length - 1 ? "none" : "2px solid #000" }}>
-                                        <td style={{ ...tdStyle, borderRight: "3px solid #000" }}>
+                                    <tr key={p._id} style={{ borderBottom: index === validParticipants.length - 1 ? "none" : "var(--border-ui)" }}>
+                                        <td style={{ ...tdStyle, borderRight: "var(--border-ui)" }}>
                                             <div style={{ fontWeight: "800", fontSize: "1rem" }}>{p.member?.name}</div>
                                             <div style={{ fontSize: "0.85rem", color: "#666", fontWeight: "600" }}>
                                                 Kontakt: {normalizeMemberContactFields(p.member)?.guardianPhone || "Bez telefonu"}
                                             </div>
                                         </td>
-                                        <td style={{ ...tdStyle, borderRight: "3px solid #000" }}>
+                                        <td style={{ ...tdStyle, borderRight: "var(--border-ui)" }}>
                                             <span style={{
                                                 padding: "0.25rem 0.75rem",
                                                 borderRadius: "99px",
                                                 fontSize: "0.85rem",
-                                                border: "2px solid #000",
+                                                border: "var(--border-ui)",
                                                 backgroundColor: p.status === "attending" ? "#86efac" : p.status === "not_attending" ? "#fca5a5" : "#fff",
                                                 color: "black",
                                                 fontWeight: "700",
-                                                boxShadow: "2px 2px 0 0 #000"
+                                                boxShadow: "var(--shadow-md)"
                                             }}>
                                                 {p.status === "pending" ? "Bez reakce" : p.status === "attending" ? "Jede" : "Nejede"}
                                             </span>
@@ -1328,18 +1329,18 @@ export default function TripDashboardPage() {
                                                 </span>
                                             )}
                                         </td>
-                                        <td style={{ ...tdStyle, borderRight: "3px solid #000" }}>
+                                        <td style={{ ...tdStyle, borderRight: "var(--border-ui)" }}>
                                             <button
                                                 onClick={() => copyLink(p.accessKey)}
                                                 style={{
                                                     fontSize: "0.85rem",
                                                     padding: "0.25rem 0.5rem",
-                                                    border: "2px solid #000",
+                                                    border: "var(--border-ui)",
                                                     borderRadius: "4px",
                                                     cursor: "pointer",
                                                     backgroundColor: "white",
                                                     fontWeight: "600",
-                                                    boxShadow: "2px 2px 0 0 #000",
+                                                    boxShadow: "var(--shadow-md)",
                                                     transition: "transform 0.1s",
                                                     display: "flex",
                                                     alignItems: "center",
@@ -1357,7 +1358,7 @@ export default function TripDashboardPage() {
                                             </button>
                                         </td>
                                         {trip.customFields && trip.customFields.length > 0 && (
-                                            <td style={{ ...tdStyle, borderRight: "3px solid #000" }}>
+                                            <td style={{ ...tdStyle, borderRight: "var(--border-ui)" }}>
                                                 {(() => {
                                                     const parsed = getParsedResponses(p.responses);
                                                     const hasData = Object.keys(parsed).length > 0;
@@ -1367,13 +1368,13 @@ export default function TripDashboardPage() {
                                                             onClick={() => setViewResponse({ name: p.member?.name, responses: parsed })}
                                                             style={{
                                                                 padding: "0.25rem 0.75rem",
-                                                                border: "2px solid #000",
+                                                                border: "var(--border-ui)",
                                                                 borderRadius: "6px",
                                                                 backgroundColor: "#e5e7eb",
                                                                 fontWeight: "600",
                                                                 cursor: "pointer",
                                                                 fontSize: "0.85rem",
-                                                                boxShadow: "2px 2px 0 0 #000"
+                                                                boxShadow: "var(--shadow-md)"
                                                             }}
                                                         >
                                                             Zobrazit
@@ -1398,10 +1399,10 @@ export default function TripDashboardPage() {
                     {/* Documentation Banner */}
                     <div style={{
                         backgroundColor: "#FFF9E6",
-                        border: "3px solid #000",
+                        border: "var(--border-ui)",
                         borderRadius: "16px",
                         padding: "2.5rem",
-                        boxShadow: "8px 8px 0 0 #000",
+                        boxShadow: "var(--shadow-md)",
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
@@ -1422,11 +1423,11 @@ export default function TripDashboardPage() {
                             style={{
                                 padding: "1.25rem 2.5rem",
                                 backgroundColor: "#fcd34d",
-                                border: "4px solid #000",
+                                border: "var(--border-ui)",
                                 borderRadius: "12px",
                                 fontWeight: "900",
                                 cursor: "pointer",
-                                boxShadow: "6px 6px 0 0 #000",
+                                boxShadow: "var(--shadow-md)",
                                 fontSize: "1.25rem",
                                 transition: "all 0.1s"
                             }}
@@ -1440,10 +1441,10 @@ export default function TripDashboardPage() {
                     {/* Integrated Councils Section */}
                     <div style={{
                         backgroundColor: "white",
-                        border: "3px solid #000",
+                        border: "var(--border-ui)",
                         borderRadius: "16px",
                         padding: "2rem",
-                        boxShadow: "6px 6px 0 0 #000"
+                        boxShadow: "var(--shadow-md)"
                     }}>
                         <h3 style={{ fontSize: "1.4rem", fontWeight: "900", margin: "0 0 1.5rem 0", display: "flex", alignItems: "center", gap: "0.75rem" }}>
                             <img
@@ -1470,20 +1471,20 @@ export default function TripDashboardPage() {
                                             onClick={() => router.push(`/rady/${council._id}`)}
                                             style={{
                                                 backgroundColor: "#f9fafb",
-                                                border: "3px solid #000",
+                                                border: "var(--border-ui)",
                                                 borderRadius: "12px",
                                                 padding: "1.5rem",
-                                                boxShadow: "4px 4px 0 0 #000",
+                                                boxShadow: "var(--shadow-md)",
                                                 cursor: "pointer",
                                                 transition: "all 0.1s"
                                             }}
                                             onMouseEnter={e => {
                                                 e.currentTarget.style.transform = "translate(-2px, -2px)";
-                                                e.currentTarget.style.boxShadow = "6px 6px 0 0 #000";
+                                                e.currentTarget.style.boxShadow = "var(--shadow-md)";
                                             }}
                                             onMouseLeave={e => {
                                                 e.currentTarget.style.transform = "translate(0, 0)";
-                                                e.currentTarget.style.boxShadow = "4px 4px 0 0 #000";
+                                                e.currentTarget.style.boxShadow = "var(--shadow-md)";
                                             }}
                                         >
                                             <h4 style={{ margin: "0 0 0.5rem 0", fontWeight: "900", fontSize: "1.1rem" }}>{council.title}</h4>
@@ -1536,9 +1537,9 @@ export default function TripDashboardPage() {
                     <div style={{
                         backgroundColor: "white",
                         padding: "2rem",
-                        border: "3px solid #000",
+                        border: "var(--border-ui)",
                         borderRadius: "16px",
-                        boxShadow: "8px 8px 0 0 #000",
+                        boxShadow: "var(--shadow-md)",
                         width: "100%",
                         maxWidth: "500px",
                         maxHeight: "80vh",
@@ -1577,5 +1578,5 @@ export default function TripDashboardPage() {
     );
 }
 
-const thStyle = { padding: "1rem", fontWeight: "900", fontSize: "1rem", textAlign: "left" as const, borderRight: "3px solid #000" };
+const thStyle = { padding: "1rem", fontWeight: "900", fontSize: "1rem", textAlign: "left" as const, borderRight: "var(--border-ui)" };
 const tdStyle = { padding: "1rem" };
