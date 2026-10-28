@@ -141,3 +141,17 @@
   .participantCards header { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
   .participantCards details p { margin: .45rem 0; font-size: .76rem; }
 }
+
+@media (max-width: 600px) {
+  .panelHeading { flex-wrap: wrap; align-items: flex-start; }
+  .panelHeading > div { flex: 1 1 160px; min-width: 0; }
+  .panelHeading h3, .heroCopy h3 { overflow-wrap: anywhere; }
+  .secondaryButton, .primaryButton, .ghostDanger { min-height: 44px; white-space: normal; }
+  .metrics { grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); }
+}
+
+@media (max-width: 600px) {
+  .eyebrow, .metrics small { font-size: .75rem; }
+  .metrics article span:not(.metricIcon), .panelHint, .statusRows span { font-size: .875rem; }
+  .secondaryButton, .primaryButton, .copyButton, .textButton { min-height: 44px; font-size: .875rem; }
+}

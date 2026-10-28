@@ -3,3 +3,4 @@ export * from "./Card";
 export * from "./Form";
 export * from "./Modal";
 export * from "./Page";
+export * from "./CollectionToolbar";

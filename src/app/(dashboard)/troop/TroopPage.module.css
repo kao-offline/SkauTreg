@@ -4,8 +4,8 @@
 .dialogHeader span { color: #777; font-size: .65rem; font-weight: 850; letter-spacing: .09em; text-transform: uppercase; }
 .dialogHeader h2 { margin: .15rem 0 .25rem; font-size: 1.4rem; }
 .dialogHeader p { margin: 0; color: #686b70; font-size: .8rem; font-weight: 600; }
-.dialogHeader button { width: 36px; height: 36px; display: grid; place-items: center; flex: 0 0 auto; background: #fff; border: 1px solid #bbb; border-radius: 8px; cursor: pointer; }
-.createForm { display: grid; gap: 1rem; padding: 1.4rem; }
+.dialogHeader button { width: 44px; min-height: 44px; display: grid; place-items: center; flex: 0 0 auto; background: #fff; border: 1px solid #bbb; border-radius: 8px; cursor: pointer; }
+.createForm { min-height: 0; overflow-y: auto; display: grid; gap: 1rem; padding: 1.4rem; }
 .logoRow { display: grid; grid-template-columns: 82px 1fr; align-items: center; gap: 1rem; padding: 1rem; background: #f4f4f2; border: 1px solid #d5d5d7; border-radius: 11px; }
 .logoPreview { width: 76px; height: 76px; display: grid; place-items: center; overflow: hidden; color: #777; background: #fff; border: 2px solid #000; border-radius: 14px; }
 .logoPreview img { width: 100%; height: 100%; object-fit: cover; }
@@ -19,6 +19,23 @@
 .formField input { width: 100%; height: 44px; padding: .65rem .75rem; background: #fff; border: 2px solid #000; border-radius: 8px; font-weight: 700; }
 .formField input:focus { outline: 0; border-color: #166534; box-shadow: 0 0 0 3px rgba(134,239,172,.5); }
 .dialogActions { display: flex; justify-content: flex-end; gap: .6rem; padding-top: .25rem; }
-.dialogActions button { min-height: 42px; padding: .65rem 1rem; background: #fff; border: 2px solid #000; border-radius: 8px; font-weight: 800; cursor: pointer; }
+.dialogActions button { min-height: 44px; padding: .65rem 1rem; background: #fff; border: 2px solid #000; border-radius: 8px; font-weight: 800; cursor: pointer; }
 .dialogActions button[type="submit"] { background: var(--color-primary); box-shadow: 2px 2px 0 #000; }
 @media (max-width: 560px) { .formGrid { grid-template-columns: 1fr; } .logoRow { grid-template-columns: 64px 1fr; } .logoPreview { width: 60px; height: 60px; } .dialogActions button { flex: 1; } }
+
+@media (max-width: 600px) {
+  .dialogHeader, .createForm { padding: 1rem; }
+  .formField input { min-width: 0; font-size: 1rem; }
+  .logoRow { grid-template-columns: minmax(0, 1fr); }
+  .uploadButton { display: flex; min-height: 44px; align-items: center; font-size: .875rem; }
+}
+
+.troopLink { min-width: 0; }
+.troopCard { display: grid; align-content: start; gap: .75rem; height: 100%; }
+.cardTop { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.cardTop > span { color: var(--text-muted); font-size: .875rem; font-weight: 700; }
+.troopCard h2 { margin: 0; font-size: 1.375rem; line-height: 1.3; overflow-wrap: anywhere; }
+.troopCard p { margin: 0; color: var(--text-muted); font-size: .875rem; }
+
+.fileInput { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.uploadButton:focus-within { outline: 3px solid #2563eb; outline-offset: 2px; }

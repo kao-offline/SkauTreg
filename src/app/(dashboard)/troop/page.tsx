@@ -5,6 +5,7 @@ import { api } from "../../../../convex/_generated/api";
 import { useSearchParams } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
+import { Button, Card, ModalShell, PageActions, PageHeader, PageTitle } from "@/components/ui";
 import Cropper from "react-easy-crop";
 import type { Point, Area } from "react-easy-crop";
 import { ImagePlus, Plus, X } from "lucide-react";
@@ -56,11 +57,10 @@ const createImage = (url: string): Promise<HTMLImageElement> =>
         image.src = url;
     });
 
-// Spinning Logo Component
-const SpinningLogo = ({ src, alt = "Logo" }: { src?: string; alt?: string }) => (
+const TroopLogo = ({ src, alt = "Logo" }: { src?: string; alt?: string }) => (
     <div style={{
-        width: "80px",
-        height: "80px",
+        width: "48px",
+        height: "48px",
         borderRadius: "50%",
         border: "2px solid #000",
         backgroundColor: "#ccc", // Placeholder gray
@@ -80,7 +80,7 @@ const SpinningLogo = ({ src, alt = "Logo" }: { src?: string; alt?: string }) => 
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
-                    animation: "spin 10s linear infinite" // The spinning part
+
                 }}
             />
         ) : (
@@ -94,17 +94,11 @@ const SpinningLogo = ({ src, alt = "Logo" }: { src?: string; alt?: string }) => 
                 fontWeight: "bold",
                 fontSize: "0.8rem",
                 color: "#71717a",
-                animation: "spin 10s linear infinite" // Placeholder text spins too? Maybe cool.
+
             }}>
                 Logo
             </div>
         )}
-        <style jsx>{`
-            @keyframes spin {
-                from { transform: rotate(0deg); }
-                to { transform: rotate(360deg); }
-            }
-        `}</style>
     </div>
 );
 
@@ -203,45 +197,16 @@ export default function TroopsPage() {
     };
 
     return (
-        <div style={{ position: "relative", minHeight: "80vh", paddingBottom: "2rem" }} onClick={() => setShowCreateForm(false)}>
+        <div style={{ position: "relative", minHeight: "80vh", paddingBottom: "2rem" }}>
             {/* Standard Header */}
-            <div className="headingContainer" style={{ height: "64px", minHeight: "64px", padding: "0 2rem", display: "flex", flexDirection: "row", alignItems: "center", boxSizing: "border-box" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", gap: "1rem" }}>
-                    <h1 style={{ fontSize: "1.5rem", fontWeight: "900", margin: 0, lineHeight: 1 }}>Oddíly</h1>
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setShowCreateForm(!showCreateForm);
-                        }}
-                        style={{
-                            width: "48px",
-                            height: "48px",
-                            flexShrink: 0,
-                            borderRadius: "50%",
-                            backgroundColor: "white",
-                            border: "2px solid #000",
-                            boxShadow: "4px 4px 0 0 #000",
-                            fontSize: "2rem",
-                            fontWeight: "300",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            cursor: "pointer",
-                            padding: "0 0 6px 0",
-                            transition: "transform 0.1s"
-                        }}
-                        onMouseDown={e => e.currentTarget.style.transform = "translate(2px, 2px)"}
-                        onMouseUp={e => e.currentTarget.style.transform = "translate(0, 0)"}
-                    >
-                        <Plus size={25} strokeWidth={2.5} />
-                    </button>
-                    
+            <PageHeader>
+                <PageTitle>Oddíly</PageTitle>
+                <PageActions><Button onClick={() => setShowCreateForm(true)}><Plus size={20} /> Přidat oddíl</Button></PageActions>
                     {showCreateForm && (
-                        <div className={styles.createOverlay} onClick={() => setShowCreateForm(false)}>
-                          <div className={styles.createDialog} onClick={e => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="new-troop-title">
+<ModalShell className={styles.createDialog} width="610px" onClose={isCreating ? undefined : () => setShowCreateForm(false)} aria-labelledby="new-troop-title">
                             <div className={styles.dialogHeader}>
-                              <div><span>Nový projekt</span><h2 id="new-troop-title">Vytvořit oddíl</h2><p>Základní údaje můžete kdykoliv doplnit v nastavení.</p></div>
-                              <button onClick={() => setShowCreateForm(false)} aria-label="Zavřít"><X size={22} /></button>
+                              <div><span>Nový oddíl</span><h2 id="new-troop-title">Vytvořit oddíl</h2><p>Základní údaje můžete kdykoliv doplnit v nastavení.</p></div>
+                              <button disabled={isCreating} onClick={() => setShowCreateForm(false)} aria-label="Zavřít"><X size={22} /></button>
                             </div>
                             <form onSubmit={handleCreate} className={styles.createForm}>
                                 <div className={styles.logoRow}>
@@ -254,13 +219,14 @@ export default function TroopsPage() {
                                     </div>
                                     <div><strong>Logo oddílu</strong><small>Čtvercový obrázek, ideálně alespoň 400 × 400 px.</small>
                                         <label className={styles.uploadButton}>Vybrat obrázek
-                                            <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: "none" }} />
+                                            <input aria-label="Logo oddílu" className={styles.fileInput} type="file" accept="image/*" onChange={handleFileChange} disabled={isCreating} />
                                         </label>
                                     </div>
                                 </div>
                                 <div className={styles.formField}>
-                                    <label>Jméno oddílu</label>
+                                    <label htmlFor="troop-name">Jméno oddílu</label>
                                     <input
+                                        id="troop-name"
                                         required
                                         value={newName}
                                         onChange={e => setNewName(e.target.value)}
@@ -269,37 +235,37 @@ export default function TroopsPage() {
                                 </div>
                                 <div className={styles.formGrid}>
                                     <div className={styles.formField}>
-                                        <label>Číslo oddílu</label>
+                                        <label htmlFor="troop-number">Číslo oddílu</label>
                                         <input
+                                            id="troop-number"
                                             value={newNumber}
                                             onChange={e => setNewNumber(e.target.value)}
                                             placeholder="106"
                                         />
                                     </div>
                                     <div className={styles.formField}>
-                                        <label>Typ</label>
+                                        <label htmlFor="troop-type">Typ</label>
                                         <input
+                                            id="troop-type"
                                             value={newType}
                                             onChange={e => setNewType(e.target.value)}
                                             placeholder="Skauti"
                                         />
                                     </div>
                                 </div>
-                                <div className={styles.dialogActions}><button type="button" onClick={() => setShowCreateForm(false)}>Zrušit</button><button type="submit" disabled={isCreating}>{isCreating ? "Vytvářím…" : "Vytvořit oddíl"}</button></div>
+                                <div className={styles.dialogActions}><button type="button" disabled={isCreating} onClick={() => setShowCreateForm(false)}>Zrušit</button><button type="submit" disabled={isCreating}>{isCreating ? "Vytvářím…" : "Vytvořit oddíl"}</button></div>
                             </form>
-                          </div>
-                        </div>
+                        </ModalShell>
                     )}
-                </div>
-            </div>
+            </PageHeader>
 
             <div className="dashboardContent">
 
             {/* Troops Grid */}
             <div style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-                gap: "2rem"
+                gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 300px), 1fr))",
+                gap: "1.25rem"
             }}>
                 {troops === undefined ? (
                     <div>Načítám oddíly...</div>
@@ -309,51 +275,12 @@ export default function TroopsPage() {
                     </div>
                 ) : (
                     troops.map((troop) => (
-                        <Link href={`/troop/${troop._id}`} key={troop._id} style={{ textDecoration: 'none', color: 'inherit' }}>
-                            <div className="troop-card" style={{
-                                border: "2px solid #000",
-                                borderRadius: "12px",
-                                padding: "1.5rem",
-                                backgroundColor: "white",
-                                boxShadow: "6px 6px 0 0 #000",
-                                position: "relative",
-                                minHeight: "180px",
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "space-between",
-                                transition: "transform 0.1s, box-shadow 0.1s",
-                                cursor: "pointer"
-                            }}>
-                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                                    <div>
-                                        {troop.number && (
-                                            <div style={{ fontWeight: "800", fontSize: "1.2rem", marginBottom: "0.25rem" }}>
-                                                {troop.number}. Oddíl
-                                            </div>
-                                        )}
-                                        <h2 style={{
-                                            fontSize: "2.5rem",
-                                            fontWeight: "900",
-                                            lineHeight: "1",
-                                            marginBottom: "0.5rem",
-                                            wordBreak: "break-word"
-                                        }}>
-                                            {troop.name}
-                                        </h2>
-                                        {troop.type && (
-                                            <div style={{
-                                                textTransform: "uppercase",
-                                                fontWeight: "800",
-                                                letterSpacing: "2px",
-                                                fontSize: "1rem"
-                                            }}>
-                                                {troop.type}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <SpinningLogo src={troop.logo} />
-                                </div>
-                            </div>
+                        <Link className={styles.troopLink} href={`/troop/${troop._id}`} key={troop._id}>
+                            <Card interactive className={styles.troopCard}>
+                                <div className={styles.cardTop}><span>{troop.number ? `${troop.number}. oddíl` : "Skautský oddíl"}</span><TroopLogo src={troop.logo} /></div>
+                                <h2>{troop.name}</h2>
+                                {troop.type && <p>{troop.type}</p>}
+                            </Card>
                         </Link>
                     ))
                 )}
@@ -361,17 +288,8 @@ export default function TroopsPage() {
 
             {/* Cropper Modal Overlay */}
             {imageSrc && (
-                <div style={{
-                    position: "fixed",
-                    top: 0, left: 0, right: 0, bottom: 0,
-                    backgroundColor: "rgba(0,0,0,0.85)",
-                    zIndex: 3000,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center"
-                }} onClick={e => e.stopPropagation()}>
-                    <div style={{ position: "relative", width: "90%", height: "60%", backgroundColor: "#333", borderRadius: "8px", overflow: "hidden" }}>
+                <ModalShell aria-label="Oříznout logo oddílu" width="680px" onClose={() => setImageSrc(null)}>
+                    <div style={{ position: "relative", width: "100%", height: "min(55dvh, 400px)", backgroundColor: "#333", borderRadius: "8px", overflow: "hidden" }}>
                         <Cropper
                             image={imageSrc}
                             crop={crop}
@@ -382,21 +300,11 @@ export default function TroopsPage() {
                             onZoomChange={setZoom}
                         />
                     </div>
-                    <div style={{ marginTop: "1rem", display: "flex", gap: "1rem" }}>
-                        <button
-                            onClick={() => setImageSrc(null)}
-                            style={{ padding: "0.5rem 1rem", backgroundColor: "white", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" }}
-                        >
-                            Zrušit
-                        </button>
-                        <button
-                            onClick={confirmCrop}
-                            style={{ padding: "0.5rem 1rem", backgroundColor: "#86efac", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" }}
-                        >
-                            Ořezat & Použít
-                        </button>
+                    <div style={{ padding: "1rem", display: "flex", flexWrap: "wrap", gap: "1rem", justifyContent: "flex-end" }}>
+                        <Button variant="secondary" onClick={() => setImageSrc(null)}>Zrušit</Button>
+                        <Button onClick={confirmCrop}>Oříznout a použít</Button>
                     </div>
-                </div>
+                </ModalShell>
             )}
             </div>
         </div>

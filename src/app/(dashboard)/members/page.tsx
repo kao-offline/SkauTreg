@@ -1,6 +1,8 @@
 "use client";
 
-import { ModalShell, PageHeader, PageTitle } from "@/components/ui";
+import { Button, CollectionToolbar, EmptyStateCard, ModalShell, PageContent, PageHeader, PageTitle } from "@/components/ui";
+import MemberDirectory from "@/components/members/MemberDirectory";
+import styles from "./MembersPage.module.css";
 import { useSidebar } from "@/context/SidebarContext";
 
 import { useMutation, useQuery } from "convex/react";
@@ -10,31 +12,6 @@ import { Id } from "../../../../convex/_generated/dataModel";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useFeedback } from "@/context/FeedbackContext";
 import Image from "next/image";
-import Link from "next/link";
-
-const SpinningLogo = ({ src, alt = "Logo" }: { src?: string; alt?: string }) => (
-    <div style={{
-        width: "50px",
-        height: "50px",
-        borderRadius: "50%",
-        border: "2px solid #000",
-        backgroundColor: "#ccc",
-        boxShadow: "2px 2px 0 0 #000",
-        position: "relative",
-        overflow: "hidden",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexShrink: 0,
-    }}>
-        {src ? (
-            <img src={src} alt={alt} style={{ width: "100%", height: "100%", objectFit: "cover", animation: "spin 10s linear infinite" }} />
-        ) : (
-            <span style={{ fontSize: "0.6rem", fontWeight: "bold" }}>LOGO</span>
-        )}
-        <style jsx>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
-    </div>
-);
 
 export default function MembersPage() {
     const troops = useQuery(api.troops.getByUser);
@@ -66,7 +43,6 @@ export default function MembersPage() {
     }, [troopIdParam, troops, activeTroopId]);
 
     // Get currently selected troop details
-    const selectedTroop = troops?.find(t => t._id === selectedTroopId);
 
     const members = useQuery(api.members.list, selectedTroopId ? { troopId: selectedTroopId } : "skip");
     const createMember = useMutation(api.members.create);
@@ -596,15 +572,12 @@ export default function MembersPage() {
         });
     };
 
-    if (troops === undefined) return <div>Načítám...</div>;
+    if (troops === undefined) return <div><PageHeader><PageTitle>Členové</PageTitle></PageHeader><PageContent><p role="status">Načítám oddíly…</p></PageContent></div>;
 
     if (troops.length === 0) {
-        return (
-            <div style={{ textAlign: "center", padding: "2rem" }}>
-                <p>Nejdříve si musíte vytvořit oddíl.</p>
-                <Link href="/troop" style={{ color: "blue", textDecoration: "underline" }}>Přejít na Můj Oddíl</Link>
-            </div>
-        );
+        return <div><PageHeader><PageTitle>Členové</PageTitle></PageHeader><PageContent>
+            <EmptyStateCard title="Nejdřív vytvořte oddíl" description="Členy a výpravy spravujete v rámci svého oddílu." action={<Button href="/troop?create=true">Vytvořit oddíl</Button>} />
+        </PageContent></div>;
     }
 
     // Filter members
@@ -618,272 +591,33 @@ export default function MembersPage() {
             {/* Top Title Bar */}
             <PageHeader><PageTitle>Členové</PageTitle></PageHeader>
 
-            {/* Controls Row */}
-            <div className="controls-row">
-                <div className="troop-selector-container">
-                    {/* Troop Selector Pill */}
-                    {troops.length > 0 && (
-                        <div style={{ position: 'relative', zIndex: 1, width: '100%' }}>
-                            <select
-                                aria-label="Oddíl"
-                                value={selectedTroopId || ""}
-                                onChange={(e) => handleTroopChange(e.target.value)}
-                                className="troop-select"
-                            >
-                                {troops.map(t => <option key={t._id} value={t._id}>{t.name}</option>)}
-                            </select>
-                            {/* Custom Arrow */}
-                            <span className="custom-arrow">▼</span>
+            <PageContent>
+                <CollectionToolbar troops={troops} troopId={selectedTroopId} onTroopChange={handleTroopChange} search={searchTerm} onSearchChange={setSearchTerm} searchLabel="Hledat členy">
+                    <Button onClick={openAddModal} disabled={!selectedTroopId}>Přidat člena</Button>
+                    <details className={styles.importMenu}>
+                        <summary>Importovat</summary>
+                        <div className={styles.importOptions}>
+                            <button onClick={() => importFileInputRef.current?.click()}>CSV</button>
+                            <button onClick={() => googleGroupsFileInputRef.current?.click()}>Google Groups CSV</button>
                         </div>
-                    )}
-
-                    {/* Overlapping Spinning Logo */}
-                    {selectedTroop && (
-                        <div className="spinning-logo-container">
-                            <SpinningLogo src={selectedTroop.logo} />
-                        </div>
-                    )}
-                </div>
-
-                {/* Search Bar */}
-                <div className="search-container">
-                    <input
-                        type="text"
-                        aria-label="Hledat členy"
-                        placeholder="Hledat podle jména nebo přezdívky…"
-                        value={searchTerm}
-                        onChange={e => setSearchTerm(e.target.value)}
-                        className="search-input"
-                    />
-                </div>
-
-                {/* ADD Button */}
-                <button
-                    onClick={openAddModal}
-                    className="add-button"
-                    onMouseDown={e => e.currentTarget.style.transform = "translate(2px, 2px)"}
-                    onMouseUp={e => e.currentTarget.style.transform = "translate(0, 0)"}
-                >
-                    <span style={{ fontSize: "1.5rem", lineHeight: 1 }}>+</span> Přidat člena
-                </button>
-
-                <details className="import-menu">
-                    <summary>Importovat</summary>
-                    <div className="import-menu-popover">
-                        <button onClick={() => importFileInputRef.current?.click()}>CSV</button>
-                        <button onClick={() => googleGroupsFileInputRef.current?.click()}>Google Groups CSV</button>
-                    </div>
-                </details>
-
-                <input
-                    ref={importFileInputRef}
-                    type="file"
-                    accept=".csv,text/csv"
-                    style={{ display: "none" }}
-                    onChange={(e) => handleImportFileChange(e.target.files)}
-                />
-                <input
-                    ref={googleGroupsFileInputRef}
-                    type="file"
-                    accept=".csv"
-                    style={{ display: "none" }}
-                    onChange={(e) => handleGoogleGroupsCSVFileChange(e.target.files)}
-                />
-            </div>
-
-            <style jsx>{`
-                .controls-row {
-                    display: flex;
-                    align-items: center;
-                    padding: 1.5rem var(--page-gutter) 0;
-                    margin-bottom: 2rem;
-                    flex-wrap: wrap;
-                    gap: 1rem;
-                }
-                .troop-selector-container {
-                    display: flex;
-                    align-items: center;
-                    position: relative;
-                }
-                .troop-select {
-                    padding: 0.75rem 3rem 0.75rem 1.5rem;
-                    border-radius: 10px;
-                    border: 2px solid #000;
-                    box-shadow: 2px 2px 0 0 #000;
-                    font-weight: 800;
-                    font-size: 1rem;
-                    appearance: none;
-                    background-color: white;
-                    cursor: pointer;
-                    line-height: 1;
-                    padding-right: 60px;
-                    max-width: 100%;
-                }
-                .custom-arrow {
-                    position: absolute;
-                    right: 15px;
-                    top: 55%;
-                    transform: translateY(-50%);
-                    pointer-events: none;
-                    font-weight: bold;
-                }
-                .spinning-logo-container {
-                    margin-left: -25px;
-                    z-index: 2;
-                }
-                .search-container {
-                    flex: 1;
-                    max-width: 500px;
-                    min-width: 300px;
-                    margin: 0 auto;
-                }
-                .search-input {
-                    width: 100%;
-                    padding: 0.75rem 1.5rem;
-                    border-radius: 10px;
-                    border: 2px solid #000;
-                    box-shadow: 2px 2px 0 0 #000;
-                    font-size: .95rem;
-                    outline: none;
-                    font-weight: 500;
-                }
-                .add-button {
-                    padding: 0.75rem 2rem;
-                    border-radius: 10px;
-                    background-color: var(--color-primary);
-                    border: 2px solid #000;
-                    box-shadow: 2px 2px 0 0 #000;
-                    font-size: .9rem;
-                    font-weight: 850;
-                    cursor: pointer;
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    white-space: nowrap;
-                    transition: transform 0.1s;
-                    flex-shrink: 0;
-                }
-                .add-button:first-of-type {
-                    margin-left: auto;
-                }
-                .import-menu { position: relative; flex-shrink: 0; }
-                .import-menu summary { list-style: none; padding: .75rem 1rem; border: 2px solid #000; border-radius: 10px; background: #fff; box-shadow: 2px 2px 0 #000; font-size: .85rem; font-weight: 800; cursor: pointer; }
-                .import-menu summary::-webkit-details-marker { display: none; }
-                .import-menu-popover { position: absolute; right: 0; top: calc(100% + .5rem); z-index: 20; width: 210px; display: grid; padding: .35rem; background: #fff; border: 2px solid #000; border-radius: 10px; box-shadow: 4px 4px 0 #000; }
-                .import-menu-popover button { padding: .7rem; background: transparent; border: 0; border-radius: 7px; text-align: left; font-weight: 700; cursor: pointer; }
-                .import-menu-popover button:hover { background: #f0f0ee; }
-
-                @media (max-width: 768px) {
-                    .controls-row {
-                        flex-direction: column;
-                        align-items: stretch;
-                        gap: 1rem;
-                        padding: 1rem;
-                    }
-                    .troop-selector-container {
-                        width: 100%;
-                        justify-content: space-between; /* Spread select and logo if needed, or keep overlapping */
-                    }
-                    .troop-select {
-                        width: 100%;
-                        font-size: 1.2rem;
-                        padding-right: 40px;
-                    }
-                    .search-container {
-                        margin: 0;
-                        width: 100%;
-                        max-width: none;
-                    }
-                    .add-button {
-                        width: 100%;
-                        justify-content: center;
-                    }
-                    .import-menu, .import-menu summary { width: 100%; text-align: center; }
-                    .import-menu-popover { position: static; width: 100%; margin-top: .5rem; box-shadow: none; }
-                }
-            `}</style>
-
-            {/* Members Table */}
-            <div style={{
-                border: "2px solid #000",
-                borderRadius: "14px",
-                boxShadow: "3px 3px 0 0 #000",
-                overflow: "hidden",
-                backgroundColor: "white",
-                margin: "0 var(--page-gutter)"
-            }}>
-                <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                    {/* Green Accented Header */}
-                    <thead style={{ backgroundColor: "#86efac", borderBottom: "3px solid #000" }}>
-                        <tr>
-                            <th style={{ padding: "1rem", textAlign: "left", fontWeight: "900", borderRight: "3px solid #000", fontSize: "1.1rem" }}>Jméno</th>
-                            <th style={{ padding: "1rem", textAlign: "left", fontWeight: "900", borderRight: "3px solid #000", fontSize: "1.1rem" }}>Přezdívka</th>
-                            <th style={{ padding: "1rem", textAlign: "left", fontWeight: "900", borderRight: "3px solid #000", fontSize: "1.1rem" }}>Rok Narození</th>
-                            <th style={{ padding: "1rem", textAlign: "left", fontWeight: "900", borderRight: "3px solid #000", fontSize: "1.1rem" }}>Zástupce</th>
-                            <th style={{ padding: "1rem", textAlign: "center", fontWeight: "900", fontSize: "1.1rem" }}>Akce</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {!members ? (
-                            <tr><td colSpan={5} style={{ padding: "2rem", textAlign: "center" }}>Načítám seznam...</td></tr>
-                        ) : filteredMembers?.length === 0 ? (
-                            <tr><td colSpan={5} style={{ padding: "2rem", textAlign: "center", fontStyle: "italic" }}>Žádní členové nalezeni.</td></tr>
-                        ) : (
-                            filteredMembers?.map((member, index) => (
-                                <tr
-                                    key={member._id}
-                                    style={{
-                                        borderBottom: index === filteredMembers.length - 1 ? "none" : "2px solid #000",
-                                        fontWeight: "600",
-                                    }}
-                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#f0fdf4"}
-                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
-                                >
-                                    <td style={{ padding: "1rem", borderRight: "3px solid #000", fontWeight: "800" }}>{member.name}</td>
-                                    <td style={{ padding: "1rem", borderRight: "3px solid #000" }}>{member.nickname || "-"}</td>
-                                    <td style={{ padding: "1rem", borderRight: "3px solid #000" }}>{member.birthDate || "-"}</td>
-                                    <td style={{ padding: "1rem", borderRight: "3px solid #000" }}>{member.guardianName || member.parentName || "-"}</td>
-                                    <td style={{ padding: "1rem", textAlign: "center" }}>
-                                        <button
-                                            onClick={() => {
-                                                setSelectedMemberForDetail(member);
-                                                setShowDetailModal(true);
-                                            }}
-                                            style={{
-                                                backgroundColor: "white",
-                                                color: "black",
-                                                padding: "0.5rem 1.2rem",
-                                                borderRadius: "6px",
-                                                border: "2px solid #000",
-                                                fontWeight: "900",
-                                                cursor: "pointer",
-                                                fontSize: "0.9rem",
-                                                boxShadow: "3px 3px 0 0 #000"
-                                            }}
-                                        >
-                                            Zobrazit
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
-                </div>
-            </div>
+                    </details>
+                </CollectionToolbar>
+                <input ref={importFileInputRef} type="file" accept=".csv,text/csv" hidden onChange={event => handleImportFileChange(event.target.files)} />
+                <input ref={googleGroupsFileInputRef} type="file" accept=".csv" hidden onChange={event => handleGoogleGroupsCSVFileChange(event.target.files)} />
+                <MemberDirectory members={members === undefined ? undefined : filteredMembers} onSelect={member => { setSelectedMemberForDetail(member); setShowDetailModal(true); }} />
+            </PageContent>
 
             {/* Add/Edit Member Modal */}
             {showModal && (
-                <ModalShell width="500px" aria-label="Údaje člena" onClose={isSaving ? undefined : () => setShowModal(false)} style={{
+                <ModalShell className={styles.memberDialog} width="500px" aria-label="Údaje člena" onClose={isSaving ? undefined : () => setShowModal(false)} style={{
                         backgroundColor: "white",
-                        padding: "2rem",
+                        padding: "clamp(1rem, 4vw, 2rem)",
                         border: "3px solid #000",
                         borderRadius: "16px",
                         boxShadow: "8px 8px 0 0 #000",
                         width: "100%",
                         maxWidth: "500px",
-                        maxHeight: "90vh",
+                        maxHeight: "calc(100dvh - 2rem)",
                         overflowY: "auto"
                     }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
@@ -939,7 +673,7 @@ export default function MembersPage() {
                                             style={{ width: "100%", padding: "0.6rem", border: "2px solid #000", borderRadius: "6px", boxShadow: "4px 4px 0 0 #000", outline: "none", fontWeight: "600" }}
                                         />
                                     </div>
-                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))", gap: "1rem" }}>
                                         <div>
                                             <label style={{ display: "block", fontWeight: "800", marginBottom: "0.25rem" }}>Přezdívka</label>
                                             <input
@@ -974,7 +708,7 @@ export default function MembersPage() {
                                             style={{ width: "100%", padding: "0.6rem", border: "2px solid #000", borderRadius: "6px", boxShadow: "4px 4px 0 0 #000", outline: "none", fontWeight: "600" }}
                                         />
                                     </div>
-                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))", gap: "1rem" }}>
                                         <div>
                                             <label style={{ display: "block", fontWeight: "800", marginBottom: "0.25rem" }}>Číslo Zástupce</label>
                                             <input
@@ -1012,7 +746,7 @@ export default function MembersPage() {
                                             style={{ width: "100%", padding: "0.6rem", border: "2px solid #000", borderRadius: "6px", boxShadow: "4px 4px 0 0 #000", outline: "none", fontWeight: "600" }}
                                         />
                                     </div>
-                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))", gap: "1rem" }}>
                                         <div>
                                             <label style={{ display: "block", fontWeight: "800", marginBottom: "0.25rem" }}>Číslo 2</label>
                                             <input
@@ -1070,15 +804,15 @@ export default function MembersPage() {
 
             {/* Import Mapping Modal */}
             {showImportModal && (
-                <ModalShell width="1000px" aria-label="Import členů" onClose={isImporting ? undefined : () => setShowImportModal(false)} style={{
+                <ModalShell className={styles.memberDialog} width="1000px" aria-label="Import členů" onClose={isImporting ? undefined : () => setShowImportModal(false)} style={{
                         backgroundColor: "white",
-                        padding: "2rem",
+                        padding: "clamp(1rem, 4vw, 2rem)",
                         border: "3px solid #000",
                         borderRadius: "16px",
                         boxShadow: "8px 8px 0 0 #000",
                         width: "95%",
                         maxWidth: "1000px",
-                        maxHeight: "90vh",
+                        maxHeight: "calc(100dvh - 2rem)",
                         overflowY: "auto",
                         display: "grid",
                         gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
@@ -1226,7 +960,7 @@ export default function MembersPage() {
                                                     {/* Member Info */}
                                                     <div style={{ marginBottom: "1rem" }}>
                                                         <div style={{ fontWeight: "800", fontSize: "0.85rem", textTransform: "uppercase", marginBottom: "0.5rem" }}>Člen</div>
-                                                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+                                                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))", gap: "0.75rem" }}>
                                                             <div>
                                                                 <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "#6b7280" }}>Jméno</div>
                                                                 <div style={{ fontSize: "0.9rem" }}>{memberName}</div>
@@ -1245,7 +979,7 @@ export default function MembersPage() {
                                                     {/* Guardian 1 */}
                                                     <div style={{ marginBottom: "1rem" }}>
                                                         <div style={{ fontWeight: "800", fontSize: "0.85rem", textTransform: "uppercase", marginBottom: "0.5rem" }}>Zástupce 1</div>
-                                                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+                                                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))", gap: "0.75rem" }}>
                                                             <div>
                                                                 <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "#6b7280" }}>Jméno</div>
                                                                 <div style={{ fontSize: "0.9rem" }}>{guardianName}</div>
@@ -1278,7 +1012,7 @@ export default function MembersPage() {
                                                     {guardian2Name && (
                                                         <div style={{ marginBottom: "1rem", paddingTop: "1rem", borderTop: "2px solid #e5e7eb" }}>
                                                             <div style={{ fontWeight: "800", fontSize: "0.85rem", textTransform: "uppercase", marginBottom: "0.5rem" }}>Zástupce 2</div>
-                                                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+                                                            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))", gap: "0.75rem" }}>
                                                                 <div>
                                                                     <div style={{ fontSize: "0.75rem", fontWeight: "700", color: "#6b7280" }}>Jméno</div>
                                                                     <div style={{ fontSize: "0.9rem" }}>{guardian2Name}</div>
@@ -1353,7 +1087,7 @@ export default function MembersPage() {
 
             {/* Member Detail Popup */}
             {showDetailModal && selectedMemberForDetail && (
-                <ModalShell width="600px" aria-label="Detail člena" onClose={() => setShowDetailModal(false)} style={{
+                <ModalShell className={styles.memberDialog} width="600px" aria-label="Detail člena" onClose={() => setShowDetailModal(false)} style={{
                         backgroundColor: "white",
                         border: "2px solid var(--border-color)",
                         borderRadius: "8px",
@@ -1361,7 +1095,7 @@ export default function MembersPage() {
                         padding: "2rem",
                         maxWidth: "600px",
                         width: "100%",
-                        maxHeight: "90vh",
+                        maxHeight: "calc(100dvh - 2rem)",
                         overflowY: "auto"
                     }}>
                         {/* Header */}
@@ -1390,7 +1124,7 @@ export default function MembersPage() {
                         {/* Member Info */}
                         <div style={{ marginBottom: "2rem", paddingBottom: "1.5rem", borderBottom: "2px solid #e5e7eb" }}>
                             <h3 style={{ fontSize: "0.9rem", fontWeight: "900", textTransform: "uppercase", marginBottom: "1rem", letterSpacing: "0.05em" }}>Údaje člena</h3>
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+                            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))", gap: "1.5rem" }}>
                                 <div>
                                     <div style={{ fontSize: "0.75rem", fontWeight: "800", color: "#6b7280", marginBottom: "0.5rem", textTransform: "uppercase" }}>Jméno a Příjmení</div>
                                     <div style={{ fontSize: "0.95rem", fontWeight: "700" }}>{selectedMemberForDetail.name}</div>
@@ -1498,15 +1232,15 @@ export default function MembersPage() {
 
             {/* Google Groups CSV Import Modal */}
             {showGoogleGroupsCSVModal && (
-                <ModalShell width="800px" aria-label="Import z Google Groups" onClose={() => setShowGoogleGroupsCSVModal(false)} style={{
+                <ModalShell className={styles.memberDialog} width="800px" aria-label="Import z Google Groups" onClose={() => setShowGoogleGroupsCSVModal(false)} style={{
                         backgroundColor: "white",
-                        padding: "2rem",
+                        padding: "clamp(1rem, 4vw, 2rem)",
                         border: "3px solid #000",
                         borderRadius: "16px",
                         boxShadow: "8px 8px 0 0 #000",
                         width: "95%",
                         maxWidth: "800px",
-                        maxHeight: "90vh",
+                        maxHeight: "calc(100dvh - 2rem)",
                         overflowY: "auto",
                         display: "grid",
                         gridTemplateColumns: "1fr"
@@ -1796,7 +1530,7 @@ export default function MembersPage() {
                                 )}
 
                                 {/* Action Buttons */}
-                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+                                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))", gap: "0.75rem" }}>
                                     <button
                                         onClick={() => {
                                             setShowGoogleGroupsCSVModal(false);

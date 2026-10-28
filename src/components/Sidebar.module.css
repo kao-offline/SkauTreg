@@ -90,3 +90,9 @@
 @media (max-width: 768px) {
   .sidebar:not(.open) { visibility: hidden; }
 }
+
+@media (max-width: 768px) {
+  .sidebar { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+  .navScroll { overscroll-behavior: contain; }
+  .inlineSubmenu a { display: flex; align-items: center; min-height: 44px; font-size: .875rem; }
+}

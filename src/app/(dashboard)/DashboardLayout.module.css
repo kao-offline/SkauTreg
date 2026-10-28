@@ -50,7 +50,7 @@
 .mobileMenuButton { display: none; }
 
 @media (max-width: 768px) {
-  .mobileMenuButton { position: fixed; left: .75rem; bottom: calc(.75rem + env(safe-area-inset-bottom)); z-index: 42; width: 44px; height: 44px; display: grid; place-items: center; color: #fff; background: #101112; border: 2px solid #000; border-radius: 10px; box-shadow: 3px 3px 0 #000; }
+  .mobileMenuButton { position: fixed; left: .75rem; bottom: calc(.75rem + env(safe-area-inset-bottom)); z-index: 42; min-width: 44px; min-height: 44px; display: flex; align-items: center; gap: .5rem; padding: .65rem .9rem; font-size: .875rem; font-weight: 750; color: #fff; background: #101112; border: 2px solid #000; border-radius: 10px; box-shadow: 3px 3px 0 #000; }
 }
 
 @media (prefers-reduced-motion: reduce) {

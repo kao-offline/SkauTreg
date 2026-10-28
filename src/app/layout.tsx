@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 import { ConvexClientProvider } from "./ConvexClientProvider";
@@ -6,6 +6,8 @@ import { FeedbackProvider } from "../context/FeedbackContext";
 import ErrorModal from "../components/ErrorModal";
 import SuccessModal from "../components/SuccessModal";
 import AnalyticsConsent from "../components/AnalyticsConsent";
+
+export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 export const metadata: Metadata = {
   title: "SkauTreg - Správa skautských středisek s mailovým systémem",
@@ -25,7 +27,6 @@ export default function RootLayout({
     <html lang="cs" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body suppressHydrationWarning style={{ margin: 0, padding: 0 }}>
         <ConvexClientProvider>

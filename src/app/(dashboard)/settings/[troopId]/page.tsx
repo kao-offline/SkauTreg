@@ -39,7 +39,7 @@ const createImage = (url: string): Promise<HTMLImageElement> =>
         image.src = url;
     });
 
-const SpinningLogo = ({ src, alt = "Logo" }: { src?: string; alt?: string }) => (
+const TroopLogo = ({ src, alt = "Logo" }: { src?: string; alt?: string }) => (
     <div style={{
         width: "120px",
         height: "120px",
@@ -56,11 +56,10 @@ const SpinningLogo = ({ src, alt = "Logo" }: { src?: string; alt?: string }) => 
         margin: "0 auto"
     }}>
         {src ? (
-            <img src={src} alt={alt} style={{ width: "100%", height: "100%", objectFit: "cover", animation: "spin 10s linear infinite" }} />
+            <img src={src} alt={alt} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
         ) : (
             <span style={{ fontSize: "1rem", fontWeight: "bold" }}>LOGO</span>
         )}
-        <style jsx>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>
 );
 
@@ -337,7 +336,7 @@ export default function TroopSettingsPage() {
                         <div style={{ textAlign: "center", padding: "2rem", border: "3px dashed #ccc", borderRadius: "12px" }}>
                             <h3 style={{ fontWeight: "900", marginBottom: "1rem" }}>Logo Oddílu</h3>
                             <div style={{ marginBottom: "1.5rem" }}>
-                                <SpinningLogo src={previewUrl || troop.logo} />
+                                <TroopLogo src={previewUrl || troop.logo} />
                             </div>
                             <label style={{
                                 display: "inline-block",
