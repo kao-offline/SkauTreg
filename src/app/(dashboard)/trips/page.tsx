@@ -1,13 +1,16 @@
 "use client";
 
+import { useSidebar } from "@/context/SidebarContext";
+
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Id } from "../../../../convex/_generated/dataModel";
 import Link from "next/link";
 import TripForm, { TripFormData } from "../../../components/TripForm";
 import { useFeedback } from "@/context/FeedbackContext";
 import { CalendarPlus, Plus, X } from "lucide-react";
+import { ModalShell, PageHeader, PageTitle } from "@/components/ui";
 import styles from "./TripsPage.module.css";
 
 const SpinningLogo = ({ src, alt = "Logo" }: { src?: string; alt?: string }) => (
@@ -43,6 +46,7 @@ export default function TripsPage() {
     const router = useRouter();
     const pathname = usePathname();
     const troopIdParam = searchParams.get("troopId");
+    const { activeTroopId } = useSidebar();
 
     const [selectedTroopId, setSelectedTroopId] = useState<Id<"troops"> | null>(
         troopIdParam ? (troopIdParam as Id<"troops">) : null
@@ -60,9 +64,9 @@ export default function TripsPage() {
         if (troopIdParam) {
             setSelectedTroopId(troopIdParam as Id<"troops">);
         } else if (troops && troops.length > 0) {
-            setSelectedTroopId((current) => current || troops[0]._id);
+            setSelectedTroopId(troops.find(t => t._id === activeTroopId)?._id || troops[0]._id);
         }
-    }, [troopIdParam, troops]);
+    }, [troopIdParam, troops, activeTroopId]);
 
     // Get currently selected troop details
     const selectedTroop = troops?.find(t => t._id === selectedTroopId);
@@ -72,7 +76,6 @@ export default function TripsPage() {
 
     const [isCreating, setIsCreating] = useState(false);
     const [showAddModal, setShowAddModal] = useState(false);
-    const createCloseRef = useRef<HTMLButtonElement>(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [activeTab, setActiveTab] = useState<"upcoming" | "old">("upcoming");
 
@@ -85,20 +88,6 @@ export default function TripsPage() {
             setShowAddModal(true);
         }
     }, [searchParams]);
-
-    useEffect(() => {
-        if (!showAddModal) return;
-        const previous = document.activeElement as HTMLElement | null;
-        createCloseRef.current?.focus();
-        const onKeyDown = (event: KeyboardEvent) => event.key === "Escape" && !isCreating && setShowAddModal(false);
-        document.addEventListener("keydown", onKeyDown);
-        document.body.style.overflow = "hidden";
-        return () => {
-            document.removeEventListener("keydown", onKeyDown);
-            document.body.style.overflow = "";
-            previous?.focus();
-        };
-    }, [showAddModal, isCreating]);
 
     const handleCreate = async (data: TripFormData) => {
         if (!selectedTroopId) return;
@@ -162,9 +151,7 @@ export default function TripsPage() {
     return (
         <div style={{ width: "100%", position: "relative", overflowX: "hidden", paddingBottom: "2rem" }}>
             {/* Top Title Bar */}
-            <div className="headingContainer">
-                <h1 style={{ fontSize: "1.5rem", fontWeight: "900", margin: 0 }}>Výpravy</h1>
-            </div>
+            <PageHeader><PageTitle>Výpravy</PageTitle></PageHeader>
 
             <div className="dashboardContent">
                 {/* Controls Row */}
@@ -174,6 +161,7 @@ export default function TripsPage() {
                     {troops.length > 0 && (
                         <div style={{ position: 'relative', zIndex: 1, width: '100%' }}>
                             <select
+                                aria-label="Oddíl"
                                 value={selectedTroopId || ""}
                                 onChange={(e) => handleTroopChange(e.target.value)}
                                 className="troop-select"
@@ -197,6 +185,7 @@ export default function TripsPage() {
                 <div className="search-container">
                     <input
                         type="text"
+                        aria-label="Hledat výpravy"
                         placeholder="Hledat výpravy..."
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
@@ -207,12 +196,14 @@ export default function TripsPage() {
                 {/* Tabs */}
                 <div className="tabs-switcher">
                     <button
+                        aria-pressed={activeTab === "upcoming"}
                         onClick={() => setActiveTab("upcoming")}
                         className={`tab-button ${activeTab === "upcoming" ? "active" : ""}`}
                     >
                         Nadcházející
                     </button>
                     <button
+                        aria-pressed={activeTab === "old"}
                         onClick={() => setActiveTab("old")}
                         className={`tab-button ${activeTab === "old" ? "active" : ""}`}
                     >
@@ -472,14 +463,13 @@ export default function TripsPage() {
 
             {/* Create Modal */}
             {showAddModal && (
-                <div className={styles.createOverlay} onMouseDown={(event) => event.target === event.currentTarget && setShowAddModal(false)}>
-                    <section className={styles.createDialog} role="dialog" aria-modal="true" aria-labelledby="create-trip-title">
+                <ModalShell className={styles.createDialog} width="980px" maxHeight="820px" onClose={isCreating ? undefined : () => setShowAddModal(false)} aria-labelledby="create-trip-title">
                         <header className={styles.createHeader}>
                             <div className={styles.createHeading}>
                                 <span className={styles.createIcon}><CalendarPlus size={21} /></span>
                                 <div><span>Nová výprava</span><h2 id="create-trip-title">Naplánovat výpravu</h2></div>
                             </div>
-                            <button ref={createCloseRef} type="button" className={styles.closeButton} onClick={() => setShowAddModal(false)} aria-label="Zavřít"><X size={20} /></button>
+                            <button disabled={isCreating} type="button" className={styles.closeButton} onClick={() => setShowAddModal(false)} aria-label="Zavřít"><X size={20} /></button>
                         </header>
 
                         <div className={styles.createBody}>
@@ -490,8 +480,7 @@ export default function TripsPage() {
                                 buttonText="Vytvořit výpravu"
                             />
                         </div>
-                    </section>
-                </div>
+                </ModalShell>
             )}
         </div>
     );

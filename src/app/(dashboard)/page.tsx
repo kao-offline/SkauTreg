@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import Link from "next/link";
+import { useSidebar } from "@/context/SidebarContext";
 import { useQuery } from "convex/react";
 import {
   ChartNoAxesColumn,
@@ -28,6 +29,8 @@ import {
   StatCard,
   TableScroller,
   TextInput,
+  SelectInput,
+  FieldLabel,
 } from "../../components/ui";
 
 const helpTopics = [
@@ -86,19 +89,18 @@ export default function Home() {
   const [showHelp, setShowHelp] = useState(false);
 
   const troops = useQuery(api.troops.getByUser);
+  const { activeTroopId, setActiveTroopId } = useSidebar();
+  const activeTroop = troops?.find(t => t._id === activeTroopId) || troops?.[0];
+  const troopQuery = activeTroop ? `?troopId=${activeTroop._id}` : "";
   const trips = useQuery(
     api.trips.list,
-    troops && troops.length > 0 ? { troopId: troops[0]._id } : "skip",
+    activeTroop ? { troopId: activeTroop._id } : "skip",
   );
   const members = useQuery(
     api.members.list,
-    troops && troops.length > 0 ? { troopId: troops[0]._id } : "skip",
+    activeTroop ? { troopId: activeTroop._id } : "skip",
   );
   const dashboardDataReady = troops !== undefined && (troops.length === 0 || (trips !== undefined && members !== undefined));
-
-  useEffect(() => {
-    if (dashboardDataReady) window.dispatchEvent(new Event("skautreg:dashboard-ready"));
-  }, [dashboardDataReady]);
 
   const filteredTopics = helpTopics.filter(
     (topic) =>
@@ -125,15 +127,23 @@ export default function Home() {
       </PageHeader>
 
       <PageContent>
+        {troops && troops.length > 0 && (
+          <Field style={{ maxWidth: "360px", marginBottom: "1.5rem" }}>
+            <FieldLabel>Údaje pro oddíl</FieldLabel>
+            <SelectInput value={activeTroop?._id || ""} onChange={event => setActiveTroopId(event.target.value)}>
+              {troops.map(troop => <option key={troop._id} value={troop._id}>{troop.name}</option>)}
+            </SelectInput>
+          </Field>
+        )}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
-          <StatCard href="/troop" label="Vaše oddíly" value={troops?.length || 0} icon={<House size={22} strokeWidth={3} />} />
-          <StatCard href="/trips" label="Výpravy" value={trips?.length || 0} icon={<Tent size={22} strokeWidth={3} />} />
-          <StatCard href="/members" label="Členové" value={members?.length || 0} icon={<Users size={22} strokeWidth={3} />} />
+          <StatCard href="/troop" label="Vaše oddíly" value={troops === undefined ? "…" : troops.length} icon={<House size={22} strokeWidth={3} />} />
+          <StatCard href={`/trips${troopQuery}`} label="Výpravy oddílu" value={activeTroop && trips === undefined ? "…" : trips?.length || 0} icon={<Tent size={22} strokeWidth={3} />} />
+          <StatCard href={`/members${troopQuery}`} label="Členové oddílu" value={activeTroop && members === undefined ? "…" : members?.length || 0} icon={<Users size={22} strokeWidth={3} />} />
         </div>
 
         <section style={{ marginBottom: "2rem" }}>
           <h2 style={{ fontSize: "1.125rem", fontWeight: "900", marginBottom: "1rem" }}>Nejbližší výpravy</h2>
-          {trips && trips.length > 0 ? (
+          {!dashboardDataReady ? (<p role="status">Načítám údaje oddílu…</p>) : trips && trips.length > 0 ? (
             <Card padding="none" style={{ overflow: "hidden" }}>
               <TableScroller>
                 <table style={{ width: "100%", minWidth: "720px", borderCollapse: "collapse" }}>
@@ -169,8 +179,8 @@ export default function Home() {
               title="Žádné výpravy"
               description="Zatím tu nejsou žádné nejbližší výpravy."
               action={
-                <Button href="/trips" variant="secondary">
-                  Vytvořit výpravu
+                <Button href={activeTroop ? `/trips${troopQuery}&create=true` : "/troop?create=true"} variant="secondary">
+                  {activeTroop ? "Vytvořit výpravu" : "Vytvořit oddíl"}
                 </Button>
               }
             />
@@ -181,7 +191,7 @@ export default function Home() {
           <h2 style={{ fontSize: "1.125rem", fontWeight: "900", marginBottom: "1rem" }}>Nápověda a tipy</h2>
 
           {!showHelp ? (
-            <Card padding="lg" interactive onClick={() => setShowHelp(true)} style={{ backgroundColor: "var(--color-primary)", textAlign: "center" }}>
+            <Card padding="lg" style={{ backgroundColor: "var(--color-primary)", textAlign: "center" }}>
               <HelpCircle size={40} strokeWidth={3} style={{ marginBottom: "0.75rem" }} />
               <div style={{ fontSize: "1.1rem", fontWeight: "900", marginBottom: "0.75rem" }}>Potřebujete pomoc?</div>
               <Button type="button" variant="secondary" onClick={() => setShowHelp(true)}>
@@ -192,6 +202,7 @@ export default function Home() {
             <Card padding="lg">
               <Field style={{ marginBottom: "1.5rem" }}>
                 <TextInput
+                  aria-label="Hledat v nápovědě"
                   type="text"
                   placeholder="Hledat: výprava, člen, heslo..."
                   value={searchTerm}

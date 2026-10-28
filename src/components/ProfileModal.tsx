@@ -20,6 +20,7 @@ import {
 import { api } from "../../convex/_generated/api";
 import { useProfileModal } from "../context/ProfileModalContext";
 import { useFeedback } from "../context/FeedbackContext";
+import { ModalShell } from "./ui";
 import styles from "./ProfileModal.module.css";
 
 const BENEFIT_OPTIONS = [
@@ -146,19 +147,6 @@ export default function ProfileModal() {
         if (isOpen) resetForm();
     }, [isOpen, resetForm]);
 
-    useEffect(() => {
-        if (!isOpen) return;
-        const onKeyDown = (event: KeyboardEvent) => {
-            if (event.key === "Escape" && !isSaving) closeProfile();
-        };
-        document.addEventListener("keydown", onKeyDown);
-        document.body.style.overflow = "hidden";
-        return () => {
-            document.removeEventListener("keydown", onKeyDown);
-            document.body.style.overflow = "";
-        };
-    }, [closeProfile, isOpen, isSaving]);
-
     const completedFields = useMemo(() => {
         const values = [firstName, lastName, dateOfBirth, address, personalEmail, personalPhone];
         return values.filter((value) => value.trim()).length;
@@ -269,8 +257,7 @@ export default function ProfileModal() {
     ];
 
     return (
-        <div className={styles.modalOverlay} onMouseDown={(event) => event.target === event.currentTarget && closeProfile()}>
-            <div className={styles.profileCard} role="dialog" aria-modal="true" aria-labelledby="profile-title">
+        <ModalShell className={styles.profileCard} width="980px" aria-labelledby="profile-title" onClose={isSaving ? undefined : closeProfile}>
                 <header className={styles.profileHeader}>
                     <div className={styles.profileIdentity}>
                         <div className={styles.avatarWrap}>
@@ -373,8 +360,7 @@ export default function ProfileModal() {
                         <div><button type="button" className={styles.secondaryButton} onClick={() => { resetForm(); closeProfile(); }} disabled={isSaving}>Zrušit</button><button type="submit" className={styles.primaryButton} disabled={isSaving || profile === undefined}>{isSaving ? <span className={styles.spinner} /> : <Save size={16} />}{isSaving ? "Ukládám…" : "Uložit"}</button></div>
                     </footer>
                 </form>
-            </div>
-        </div>
+        </ModalShell>
     );
 }
 

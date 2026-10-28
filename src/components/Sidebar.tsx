@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -25,6 +25,7 @@ import {
     X,
 } from "lucide-react";
 import { api } from "../../convex/_generated/api";
+import { useSidebar } from "../context/SidebarContext";
 import { useProfileModal } from "../context/ProfileModalContext";
 import styles from "./Sidebar.module.css";
 
@@ -51,18 +52,45 @@ const globalItems = [
 ];
 
 export default function Sidebar({ isOpen = false, onClose, isCollapsed = false, onToggleCollapse }: SidebarProps) {
+    const { activeTroopId, setActiveTroopId } = useSidebar();
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const troops = useQuery(api.troops.getByUser) || [];
     const { openProfile } = useProfileModal();
     const [floatingMenu, setFloatingMenu] = useState<{ top: number; left: number; label: string; children: Array<{ label: string; href: string }> } | null>(null);
     const closeMenuTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const sidebarRef = useRef<HTMLElement>(null);
     const routeTroopId = pathname?.match(/^\/troop\/([^/]+)/)?.[1] || pathname?.match(/^\/settings\/([^/]+)/)?.[1] || searchParams.get("troopId");
-    const activeTroop = troops.find((troop) => troop._id === routeTroopId) || troops[0];
+    const activeTroop = troops.find((troop) => troop._id === routeTroopId) || troops.find((troop) => troop._id === activeTroopId) || troops[0];
+
+    useEffect(() => {
+        if (activeTroop) setActiveTroopId(activeTroop._id);
+    }, [activeTroop, setActiveTroopId]);
+
+    useEffect(() => {
+        if (!isOpen) return;
+        const previous = document.activeElement as HTMLElement | null;
+        const controls = () => Array.from(sidebarRef.current?.querySelectorAll<HTMLElement>("a[href], button:not(:disabled), summary") || []).filter(element => element.getClientRects().length > 0);
+        controls()[0]?.focus();
+        const handleKey = (event: KeyboardEvent) => {
+            if (event.key === "Escape") { event.preventDefault(); onClose?.(); }
+            if (event.key !== "Tab") return;
+            const items = controls();
+            const first = items[0];
+            const last = items[items.length - 1];
+            if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+            else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+        };
+        document.addEventListener("keydown", handleKey);
+        return () => {
+            document.removeEventListener("keydown", handleKey);
+            if (previous?.isConnected) previous.focus();
+        };
+    }, [isOpen, onClose]);
 
     const isActive = (href: string, exact = false) => exact ? pathname === href : pathname === href || pathname?.startsWith(`${href}/`);
     const close = () => onClose?.();
-    const showSubmenu = (event: React.MouseEvent<HTMLElement>, label: string, children: Array<{ label: string; href: string }>) => {
+    const showSubmenu = (event: React.SyntheticEvent<HTMLElement>, label: string, children: Array<{ label: string; href: string }>) => {
         if (window.innerWidth <= 768) return;
         if (closeMenuTimer.current) clearTimeout(closeMenuTimer.current);
         const rect = event.currentTarget.getBoundingClientRect();
@@ -106,7 +134,7 @@ export default function Sidebar({ isOpen = false, onClose, isCollapsed = false, 
     return (
         <>
             <div className={`${styles.overlay} ${isOpen ? styles.visible : ""}`} onClick={close} />
-            <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""} ${isCollapsed ? styles.collapsed : ""}`} aria-label="Hlavní navigace">
+            <aside ref={sidebarRef} id="app-sidebar" className={`${styles.sidebar} ${isOpen ? styles.open : ""} ${isCollapsed ? styles.collapsed : ""}`} aria-label="Hlavní navigace">
                 <div className={styles.logoArea}>
                     <Link href="/" onClick={close} className={styles.logoLink} aria-label="SkautReg – přehled">
                         <img src="/Logo-light.svg" alt="SkautReg" className={styles.logoImage} />
@@ -123,13 +151,13 @@ export default function Sidebar({ isOpen = false, onClose, isCollapsed = false, 
                         <button className={styles.sidebarSearch} onClick={() => window.dispatchEvent(new Event("skautreg:open-command"))}>
                             <Search size={18} strokeWidth={2.4} />
                             <span>Hledat v aplikaci</span>
-                            <kbd>⌘K</kbd>
+                            <kbd>Ctrl K</kbd>
                         </button>
                         <div className={styles.sectionLabel}>Organizace</div>
                         <ul className={styles.navList}>
                             {globalItems.map(({ label, Icon, href }) => (
                                 <li key={href}>
-                                    <Link href={href} className={`${styles.navItem} ${isActive(href, href === "/home" || href === "/troop") ? styles.active : ""}`} onClick={close}>
+                                    <Link href={href} aria-current={isActive(href, href === "/home" || href === "/troop") ? "page" : undefined} className={`${styles.navItem} ${isActive(href, href === "/home" || href === "/troop") ? styles.active : ""}`} onClick={close}>
                                         <Icon className={styles.icon} size={20} strokeWidth={2.25} />
                                         <span>{label}</span>
                                     </Link>
@@ -141,13 +169,13 @@ export default function Sidebar({ isOpen = false, onClose, isCollapsed = false, 
                             {activeTroop ? (
                                 <>
                                 <details className={styles.projectPicker}>
-                                    <summary className={styles.projectSummary} title="Přepnout projekt">
+                                    <summary className={styles.projectSummary} title="Přepnout oddíl">
                                         <span className={styles.projectMark}>
                                             {activeTroop.logo ? <img src={activeTroop.logo} alt="" /> : activeTroop.name.slice(0, 2).toUpperCase()}
                                         </span>
                                         <span className={styles.projectCopy}>
                                             <strong>{activeTroop.name}</strong>
-                                            <small>Kliknutím přepnete projekt</small>
+                                            <small>Vybrat jiný oddíl</small>
                                         </span>
                                         <ChevronDown className={styles.projectChevron} size={18} />
                                     </summary>
@@ -167,10 +195,12 @@ export default function Sidebar({ isOpen = false, onClose, isCollapsed = false, 
                                             <li
                                                 key={href}
                                                 className={children ? styles.navWithSubmenu : undefined}
+                                                onFocus={children ? (event) => showSubmenu(event, label, children) : undefined}
+                                                onBlur={children ? (event) => { if (!event.currentTarget.contains(event.relatedTarget)) scheduleSubmenuClose(); } : undefined}
                                                 onMouseEnter={children ? (event) => showSubmenu(event, label, children) : undefined}
                                                 onMouseLeave={children ? scheduleSubmenuClose : undefined}
                                             >
-                                                <Link href={href} className={`${styles.navItem} ${styles.projectItem} ${isActive(activePath || href, exact) ? styles.active : ""}`} onClick={close}>
+                                                <Link href={href} aria-current={isActive(activePath || href, exact) ? "page" : undefined} className={`${styles.navItem} ${styles.projectItem} ${isActive(activePath || href, exact) ? styles.active : ""}`} onClick={close}>
                                                     <Icon className={styles.icon} size={19} strokeWidth={2.25} />
                                                     <span>{label}</span>
                                                     {children && <ChevronRight className={styles.submenuChevron} size={15} />}
@@ -211,6 +241,8 @@ export default function Sidebar({ isOpen = false, onClose, isCollapsed = false, 
                     className={styles.floatingSubmenu}
                     style={{ top: floatingMenu.top, left: floatingMenu.left }}
                     aria-label={`Části: ${floatingMenu.label}`}
+                    onFocus={keepSubmenuOpen}
+                    onBlur={scheduleSubmenuClose}
                     onMouseEnter={keepSubmenuOpen}
                     onMouseLeave={scheduleSubmenuClose}
                 >

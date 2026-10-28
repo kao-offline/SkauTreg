@@ -1,5 +1,8 @@
 "use client";
 
+import { ModalShell, PageHeader, PageTitle } from "@/components/ui";
+import { useSidebar } from "@/context/SidebarContext";
+
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { useEffect, useRef, useState } from "react";
@@ -39,6 +42,7 @@ export default function MembersPage() {
     const router = useRouter();
     const pathname = usePathname();
     const troopIdParam = searchParams.get("troopId");
+    const { activeTroopId } = useSidebar();
     const { showError, showSuccess } = useFeedback();
 
     const [selectedTroopId, setSelectedTroopId] = useState<Id<"troops"> | null>(
@@ -57,9 +61,9 @@ export default function MembersPage() {
         if (troopIdParam) {
             setSelectedTroopId(troopIdParam as Id<"troops">);
         } else if (troops && troops.length > 0) {
-            setSelectedTroopId((current) => current || troops[0]._id);
+            setSelectedTroopId(troops.find(t => t._id === activeTroopId)?._id || troops[0]._id);
         }
-    }, [troopIdParam, troops]);
+    }, [troopIdParam, troops, activeTroopId]);
 
     // Get currently selected troop details
     const selectedTroop = troops?.find(t => t._id === selectedTroopId);
@@ -612,9 +616,7 @@ export default function MembersPage() {
     return (
         <div style={{ width: "100%", position: "relative", overflowX: "hidden", paddingBottom: "2rem", boxSizing: "border-box" }}>
             {/* Top Title Bar */}
-            <div className="headingContainer">
-                <h1 style={{ fontSize: "1.5rem", fontWeight: "900", margin: 0 }}>Členové</h1>
-            </div>
+            <PageHeader><PageTitle>Členové</PageTitle></PageHeader>
 
             {/* Controls Row */}
             <div className="controls-row">
@@ -623,6 +625,7 @@ export default function MembersPage() {
                     {troops.length > 0 && (
                         <div style={{ position: 'relative', zIndex: 1, width: '100%' }}>
                             <select
+                                aria-label="Oddíl"
                                 value={selectedTroopId || ""}
                                 onChange={(e) => handleTroopChange(e.target.value)}
                                 className="troop-select"
@@ -646,6 +649,7 @@ export default function MembersPage() {
                 <div className="search-container">
                     <input
                         type="text"
+                        aria-label="Hledat členy"
                         placeholder="Hledat podle jména nebo přezdívky…"
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
@@ -691,7 +695,7 @@ export default function MembersPage() {
                 .controls-row {
                     display: flex;
                     align-items: center;
-                    padding: 1.5rem 2rem 0;
+                    padding: 1.5rem var(--page-gutter) 0;
                     margin-bottom: 2rem;
                     flex-wrap: wrap;
                     gap: 1rem;
@@ -806,7 +810,7 @@ export default function MembersPage() {
                 boxShadow: "3px 3px 0 0 #000",
                 overflow: "hidden",
                 backgroundColor: "white",
-                margin: "0 2rem"
+                margin: "0 var(--page-gutter)"
             }}>
                 <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -871,16 +875,7 @@ export default function MembersPage() {
 
             {/* Add/Edit Member Modal */}
             {showModal && (
-                <div style={{
-                    position: "fixed",
-                    top: 0, left: 0, right: 0, bottom: 0,
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                    zIndex: 2000,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center"
-                }} onClick={() => setShowModal(false)}>
-                    <div style={{
+                <ModalShell width="500px" aria-label="Údaje člena" onClose={isSaving ? undefined : () => setShowModal(false)} style={{
                         backgroundColor: "white",
                         padding: "2rem",
                         border: "3px solid #000",
@@ -890,7 +885,7 @@ export default function MembersPage() {
                         maxWidth: "500px",
                         maxHeight: "90vh",
                         overflowY: "auto"
-                    }} onClick={e => e.stopPropagation()}>
+                    }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
                             <h2 style={{ fontSize: "1.5rem", fontWeight: "900", margin: 0 }}>
                                 {editingMemberId ? "Upravit Člena" : "Přidat Člena"}
@@ -1070,22 +1065,12 @@ export default function MembersPage() {
                                 {isSaving ? "Ukládám..." : "Uložit"}
                             </button>
                         </form>
-                    </div>
-                </div>
+                </ModalShell>
             )}
 
             {/* Import Mapping Modal */}
             {showImportModal && (
-                <div style={{
-                    position: "fixed",
-                    top: 0, left: 0, right: 0, bottom: 0,
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                    zIndex: 2000,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center"
-                }} onClick={() => setShowImportModal(false)}>
-                    <div style={{
+                <ModalShell width="1000px" aria-label="Import členů" onClose={isImporting ? undefined : () => setShowImportModal(false)} style={{
                         backgroundColor: "white",
                         padding: "2rem",
                         border: "3px solid #000",
@@ -1096,9 +1081,9 @@ export default function MembersPage() {
                         maxHeight: "90vh",
                         overflowY: "auto",
                         display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
                         gap: "2rem"
-                    }} onClick={e => e.stopPropagation()}>
+                    }}>
                         {/* LEFT: Field Mapping */}
                         <div>
                             <div style={{ marginBottom: "1.5rem" }}>
@@ -1363,26 +1348,12 @@ export default function MembersPage() {
                                 {isImporting ? "Importuji..." : "Importovat"}
                             </button>
                         </div>
-                    </div>
-                </div>
+                </ModalShell>
             )}
 
             {/* Member Detail Popup */}
             {showDetailModal && selectedMemberForDetail && (
-                <div style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    backgroundColor: "rgba(0, 0, 0, 0.3)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    zIndex: 3000,
-                    padding: "2rem"
-                }} onClick={() => setShowDetailModal(false)}>
-                    <div style={{
+                <ModalShell width="600px" aria-label="Detail člena" onClose={() => setShowDetailModal(false)} style={{
                         backgroundColor: "white",
                         border: "2px solid var(--border-color)",
                         borderRadius: "8px",
@@ -1392,7 +1363,7 @@ export default function MembersPage() {
                         width: "100%",
                         maxHeight: "90vh",
                         overflowY: "auto"
-                    }} onClick={(e) => e.stopPropagation()}>
+                    }}>
                         {/* Header */}
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
                             <h2 style={{ fontSize: "1.5rem", fontWeight: "900", margin: 0 }}>{selectedMemberForDetail.name}</h2>
@@ -1522,23 +1493,12 @@ export default function MembersPage() {
                         >
                             Upravit člena
                         </button>
-                    </div>
-                </div>
+                </ModalShell>
             )}
 
             {/* Google Groups CSV Import Modal */}
             {showGoogleGroupsCSVModal && (
-                <div style={{
-                    position: "fixed",
-                    top: 0, left: 0, right: 0, bottom: 0,
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                    zIndex: 2000,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "2rem"
-                }} onClick={() => setShowGoogleGroupsCSVModal(false)}>
-                    <div style={{
+                <ModalShell width="800px" aria-label="Import z Google Groups" onClose={() => setShowGoogleGroupsCSVModal(false)} style={{
                         backgroundColor: "white",
                         padding: "2rem",
                         border: "3px solid #000",
@@ -1550,7 +1510,7 @@ export default function MembersPage() {
                         overflowY: "auto",
                         display: "grid",
                         gridTemplateColumns: "1fr"
-                    }} onClick={e => e.stopPropagation()}>
+                    }}>
                         {/* Header */}
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
                             <h2 style={{ fontSize: "1.3rem", fontWeight: "900", margin: 0 }}>Import z Google Groups</h2>
@@ -1882,8 +1842,7 @@ export default function MembersPage() {
                                 </div>
                             </div>
                         )}
-                    </div>
-                </div>
+                </ModalShell>
             )}
         </div>
     );
