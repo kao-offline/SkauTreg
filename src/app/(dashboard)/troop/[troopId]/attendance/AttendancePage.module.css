@@ -88,3 +88,10 @@
   .summary span { grid-column: 1 / -1; grid-row: 2; }
   .summary strong { grid-column: 2; grid-row: 1; justify-self: end; }
 }
+
+@media (max-width: 420px) {
+  .summary > div > :first-child { grid-column: 1; grid-row: 1; }
+}
+@media (max-width: 360px) {
+  .toolbar > strong { grid-column: 1 / -1; grid-row: 3; }
+}

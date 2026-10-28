@@ -24,11 +24,13 @@
   if(name==='attendance'){
    const date=page.locator('input[type=date]');await date.waitFor();
    const input=await date.boundingBox();for(const button of await page.locator('section').first().getByRole('button').all()){const b=await button.boundingBox();if(b&&input&&b.x<input.x+input.width&&b.x+b.width>input.x&&b.y<input.y+input.height&&b.y+b.height>input.y)throw Error('date overlaps arrows '+width);}
+   const summaryOverlap=await page.getByRole('region',{name:'Souhrn docházky'}).evaluate(el=>Array.from(el.children).some(card=>{const [icon,label]=card.children;const a=icon.getBoundingClientRect(),b=label.getBoundingClientRect();return a.right>b.left&&a.left<b.right&&a.bottom>b.top&&a.top<b.bottom}));if(summaryOverlap)throw Error('summary icon overlaps label '+width);
    if(width<=768){const dock=page.getByRole('navigation',{name:'Navigace a soukromí'});const main=page.locator('main').first();const mr=await main.boundingBox(),dr=await dock.boundingBox();if(mr.y+mr.height>dr.y+1)throw Error('dock overlays main');await page.locator('article').last().scrollIntoViewIfNeeded();const last=await page.locator('article').last().boundingBox();if(last.y+last.height>dr.y+1)throw Error('last attendance row behind dock');await main.evaluate(el=>el.scrollTop=0);await page.emulateMedia({reducedMotion:'reduce'});await dock.getByRole('button',{name:'Soukromí'}).click();await page.getByRole('dialog').waitFor();if(await page.getByRole('dialog').evaluate(el=>getComputedStyle(el.firstElementChild).animationName)!=='none')throw Error('dialog ignores reduced motion');await page.keyboard.press('Escape');await page.getByRole('dialog').waitFor({state:'detached'});}
   }
   if(width===320){
 
    await page.evaluate(()=>document.documentElement.style.fontSize='200%');
+   if(name==='attendance'&&(await page.locator('section').first().locator('strong').boundingBox()).height>160)throw Error('enlarged date breaks into excessive lines');
    const largeTextProblems=await overflow();if(largeTextProblems.length)throw Error(name+' enlarged text clipped '+JSON.stringify(largeTextProblems));
    await page.evaluate(()=>document.documentElement.style.fontSize='');
    if(name==='members'){await page.getByRole('button',{name:/Zobrazit člena Anna/}).click();await page.getByRole('dialog').waitFor();problems=await overflow();if(problems.length)throw Error('member dialog clipped '+JSON.stringify(problems));await page.keyboard.press('Escape');await page.getByRole('searchbox').fill('missing');await page.getByRole('heading',{name:'Žádní členové'}).waitFor();}
