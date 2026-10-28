@@ -13,7 +13,8 @@
   color: var(--text-main);
   cursor: pointer;
   user-select: none;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
   transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
 }
 

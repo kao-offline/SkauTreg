@@ -397,7 +397,7 @@ export default function TripDashboardPage() {
         <div className={workspaceStyles.workspace}>
             <aside className={workspaceStyles.rail}>
                 <div className={workspaceStyles.railBrand}><img src="/Logo-light.svg" alt="SkautREG" /><strong>{dashboard.role === "rover" ? "Náhled výpravy" : "Editor výpravy"}</strong></div>
-                <Link className={workspaceStyles.backLink} href="/trips"><ArrowLeft size={17} /> Zpět na všechny výpravy</Link>
+                <Link className={workspaceStyles.backLink} href={`/trips?troopId=${trip.troopId}`}><ArrowLeft size={17} /> Zpět na všechny výpravy</Link>
                 <div className={workspaceStyles.tripIdentity}>
                     <div className={workspaceStyles.identityTop}><span>Pracovní prostor</span><b>Výprava</b></div>
                     <h1>{trip.name}</h1>
@@ -407,15 +407,15 @@ export default function TripDashboardPage() {
 
                 <nav className={workspaceStyles.workspaceNav} aria-label="Plánování výpravy">
                     <span className={workspaceStyles.navLabel}>Plán</span>
-                    <button data-active={activeTab === 'info'} onClick={() => selectTab('info')}><ClipboardList size={18} /><span><strong>Přehled</strong><small>Základní plán a termíny</small></span></button>
-                    <button data-active={activeTab === 'zakladna'} onClick={() => selectTab('zakladna')}><MapPin size={18} /><span><strong>Základna</strong><small>Ubytování a místo</small></span></button>
-                    <button data-active={activeTab === 'doprava'} onClick={() => selectTab('doprava')}><Bus size={18} /><span><strong>Doprava</strong><small>Spoje, trasy a jízdenky</small></span></button>
-                    {canSeeSensitive && <button data-active={activeTab === 'finance'} onClick={() => selectTab('finance')}><WalletCards size={18} /><span><strong>Finance</strong><small>Rozpočet a platby</small></span></button>}
+                    <button aria-pressed={activeTab === 'info'} data-active={activeTab === 'info'} onClick={() => selectTab('info')}><ClipboardList size={18} /><span><strong>Přehled</strong><small>Základní plán a termíny</small></span></button>
+                    <button aria-pressed={activeTab === 'zakladna'} data-active={activeTab === 'zakladna'} onClick={() => selectTab('zakladna')}><MapPin size={18} /><span><strong>Základna</strong><small>Ubytování a místo</small></span></button>
+                    <button aria-pressed={activeTab === 'doprava'} data-active={activeTab === 'doprava'} onClick={() => selectTab('doprava')}><Bus size={18} /><span><strong>Doprava</strong><small>Spoje, trasy a jízdenky</small></span></button>
+                    {canSeeSensitive && <button aria-pressed={activeTab === 'finance'} data-active={activeTab === 'finance'} onClick={() => selectTab('finance')}><WalletCards size={18} /><span><strong>Finance</strong><small>Rozpočet a platby</small></span></button>}
                     <span className={workspaceStyles.navLabel}>Lidé a komunikace</span>
-                    {canSeeSensitive && <button data-active={activeTab === 'ucastnici'} onClick={() => selectTab('ucastnici')}><Users size={18} /><span><strong>Účastníci</strong><small>Přihlášky a odpovědi</small></span></button>}
-                    <button data-active={activeTab === 'dokumentace'} onClick={() => selectTab('dokumentace')}><FileText size={18} /><span><strong>Dokumentace</strong><small>Zápisy a pracovní soubory</small></span></button>
+                    {canSeeSensitive && <button aria-pressed={activeTab === 'ucastnici'} data-active={activeTab === 'ucastnici'} onClick={() => selectTab('ucastnici')}><Users size={18} /><span><strong>Účastníci</strong><small>Přihlášky a odpovědi</small></span></button>}
+                    <button aria-pressed={activeTab === 'dokumentace'} data-active={activeTab === 'dokumentace'} onClick={() => selectTab('dokumentace')}><FileText size={18} /><span><strong>Dokumentace</strong><small>Zápisy a pracovní soubory</small></span></button>
                     <div className={workspaceStyles.navWithSubmenu}>
-                        {canSeeSensitive && <button data-active={activeTab === 'emaily'} onClick={() => selectTab('emaily')}><Mail size={18} /><span><strong>E-maily</strong><small>Komunikace s rodiči</small></span></button>}
+                        {canSeeSensitive && <button aria-pressed={activeTab === 'emaily'} data-active={activeTab === 'emaily'} onClick={() => selectTab('emaily')}><Mail size={18} /><span><strong>E-maily</strong><small>Komunikace s rodiči</small></span></button>}
                         <div className={workspaceStyles.hoverSubmenu} aria-label="Části e-mailové komunikace">
                             <button data-selected={emailView === "drafts"} onClick={() => { setEmailView("drafts"); setActiveTab("emaily"); }}>Koncepty</button>
                             <button data-selected={emailView === "sent"} onClick={() => { setEmailView("sent"); setActiveTab("emaily"); }}>Odeslané zprávy</button>
@@ -424,7 +424,7 @@ export default function TripDashboardPage() {
                     </div>
                     <span className={workspaceStyles.navLabel}>Správa</span>
                     <div className={workspaceStyles.navWithSubmenu}>
-                        {canSeeSensitive && <button data-active={activeTab === 'nastaveni'} onClick={() => selectTab('nastaveni')}><Settings2 size={18} /><span><strong>Nastavení</strong><small>Údaje a přihlašování</small></span></button>}
+                        {canSeeSensitive && <button aria-pressed={activeTab === 'nastaveni'} data-active={activeTab === 'nastaveni'} onClick={() => selectTab('nastaveni')}><Settings2 size={18} /><span><strong>Nastavení</strong><small>Údaje a přihlašování</small></span></button>}
                         <div className={workspaceStyles.hoverSubmenu} aria-label="Části nastavení výpravy">
                             <button data-selected={settingsSection === "details"} onClick={() => { setSettingsSection("details"); setActiveTab("nastaveni"); }}>Základní údaje</button>
                             <button data-selected={settingsSection === "registration"} onClick={() => { setSettingsSection("registration"); setActiveTab("nastaveni"); }}>Přihlašování a otázky</button>
@@ -439,8 +439,17 @@ export default function TripDashboardPage() {
             </aside>
 
             <main className={workspaceStyles.workspaceContent}>
-                <div className={workspaceStyles.mobileContext}><span>{dashboard.role === "rover" ? "Náhled výpravy" : "Editor výpravy"}</span><strong>{trip.name}</strong><Link href="/trips"><ArrowLeft size={15} /> Zpět</Link></div>
+                <div className={workspaceStyles.mobileContext}><span>{dashboard.role === "rover" ? "Náhled výpravy" : "Editor výpravy"}</span><h1>{trip.name}</h1><Link href={`/trips?troopId=${trip.troopId}`}><ArrowLeft size={15} /> Zpět</Link></div>
 
+                {canSeeSensitive && activeTab === "emaily" && <div className={workspaceStyles.mobileSubnav} role="group" aria-label="Části e-mailové komunikace">
+                    <button aria-pressed={emailView === "drafts"} onClick={() => setEmailView("drafts")}>Koncepty</button>
+                    <button aria-pressed={emailView === "sent"} onClick={() => setEmailView("sent")}>Odeslané</button>
+                    <button aria-pressed={emailView === "responses"} onClick={() => setEmailView("responses")}>Odezva rodičů</button>
+                </div>}
+                {canSeeSensitive && activeTab === "nastaveni" && <div className={workspaceStyles.mobileSubnav} role="group" aria-label="Části nastavení výpravy">
+                    <button aria-pressed={settingsSection === "details"} onClick={() => setSettingsSection("details")}>Základní údaje</button>
+                    <button aria-pressed={settingsSection === "registration"} onClick={() => setSettingsSection("registration")}>Přihlašování a otázky</button>
+                </div>}
                 <div key={activeTab} className={workspaceStyles.sectionTransition}>
                     {activeTab === 'info' && <TripOverview trip={trip} participants={overviewParticipants} staff={tripStaff} onManageStaff={() => setIsStaffModalOpen(true)} onManageRegistration={() => { setSettingsSection("registration"); selectTab("nastaveni"); }} canManageStaff={canSeeSensitive} />}
                     {activeTab === 'zakladna' && <TripBase base={base} onUnassign={confirmUnassignBase} />}

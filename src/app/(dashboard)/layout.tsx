@@ -106,7 +106,7 @@ function DashboardLayoutInner({
                     isCollapsed={isSidebarCollapsed}
                     onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
                 />}
-                {!isTripWorkspace && <button className={styles.mobileMenuButton} onClick={() => setIsSidebarOpen(true)} aria-expanded={isSidebarOpen} aria-controls="app-sidebar" aria-label="Otevřít navigaci"><Menu size={22} /></button>}
+                {!isTripWorkspace && <button className={styles.mobileMenuButton} onClick={() => setIsSidebarOpen(true)} aria-expanded={isSidebarOpen} aria-controls="app-sidebar" aria-label="Otevřít navigaci"><Menu size={22} /><span>Menu</span></button>}
 
                 {/* Desktop Sidebar Expand Button */}
                 {isSidebarCollapsed && !isTripWorkspace && (

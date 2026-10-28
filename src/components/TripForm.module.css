@@ -62,7 +62,7 @@
 .emptyQuestions strong { color: #343936; font-size: .85rem; }
 .emptyQuestions span { font-size: .7rem; }
 .emptyQuestions button { margin-top: .5rem; }
-.formFooter { position: fixed; right: clamp(1rem, 3vw, 2.5rem); bottom: 1.1rem; z-index: 55; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; width: min(420px, calc(100vw - 2rem)); padding: .7rem .75rem .7rem .9rem; background: #fff; border: 2px solid #111; border-radius: 10px; box-shadow: 4px 4px 0 #111; animation: savePromptIn .2s ease both; }
+.formFooter { position: sticky; bottom: .5rem; z-index: 55; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; width: 100%; padding: .7rem .75rem .7rem .9rem; background: #fff; border: 2px solid #111; border-radius: 10px; box-shadow: 4px 4px 0 #111; animation: savePromptIn .2s ease both; }
 .formFooter > div { display: flex; align-items: center; gap: .55rem; color: #315f3f; }
 .formFooter > div > span { display: grid; gap: .08rem; }
 .formFooter strong { color: #222; font-size: .76rem; }
@@ -80,4 +80,19 @@
   .twoColumns, .policyGrid, .choiceGrid { grid-template-columns: 1fr; }
   .questionsHeader, .formFooter { align-items: stretch; flex-direction: column; }
   .formFooter > div { display: none; }
+}
+
+@media (max-width: 600px) {
+  .form input:not([type="radio"]):not([type="checkbox"]), .form textarea, .form select { min-height: 44px; font-size: 1rem; }
+  .rowActions button, .addButton, .emptyQuestions button { min-width: 44px; min-height: 44px; }
+  .questionRow { grid-template-columns: minmax(0, 1fr) auto; }
+  .questionNumber { display: none; }
+  .questionRow > div:nth-child(2) { min-width: 0; overflow-wrap: anywhere; }
+  .questionsHeader { gap: .5rem; }
+  .formFooter { bottom: env(safe-area-inset-bottom, 0px); }
+}
+
+@media (max-width: 600px) {
+  .card > label, .twoColumns label, .policyGrid label, .questionEditor label { font-size: .875rem; }
+  .cardHeading p, .choiceGrid small, .policyGrid small { font-size: .8125rem; }
 }

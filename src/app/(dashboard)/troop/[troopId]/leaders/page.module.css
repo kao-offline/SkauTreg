@@ -56,3 +56,9 @@
   .ownerState { grid-column: 1 / -1; }
   .infoGrid { grid-template-columns: 1fr; }
 }
+
+@media (max-width: 600px) {
+  .leaderActions button, .roleSelect, .closeButton { min-height: 44px; }
+  .roleSelect { font-size: 1rem; }
+  .closeButton { min-width: 44px; }
+}

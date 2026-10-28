@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
-import Link from "next/link";
+import { useState } from "react";
+import { TripList } from "@/components/trip/TripList";
 import { useSidebar } from "@/context/SidebarContext";
 import { useQuery } from "convex/react";
 import {
@@ -27,7 +27,6 @@ import {
   PageHeader,
   PageTitle,
   StatCard,
-  TableScroller,
   TextInput,
   SelectInput,
   FieldLabel,
@@ -109,12 +108,6 @@ export default function Home() {
       topic.keywords.some((keyword) => keyword.toLowerCase().includes(searchTerm.toLowerCase())),
   );
 
-  const formatDate = (dateStr: string) => {
-    if (!dateStr) return "";
-    const [y, m, d] = dateStr.split("-");
-    return `${d}. ${m}. ${y}`;
-  };
-
   return (
     <div>
       <PageHeader>
@@ -135,7 +128,7 @@ export default function Home() {
             </SelectInput>
           </Field>
         )}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 220px), 1fr))", gap: "1rem", marginBottom: "2rem" }}>
           <StatCard href="/troop" label="Vaše oddíly" value={troops === undefined ? "…" : troops.length} icon={<House size={22} strokeWidth={3} />} />
           <StatCard href={`/trips${troopQuery}`} label="Výpravy oddílu" value={activeTroop && trips === undefined ? "…" : trips?.length || 0} icon={<Tent size={22} strokeWidth={3} />} />
           <StatCard href={`/members${troopQuery}`} label="Členové oddílu" value={activeTroop && members === undefined ? "…" : members?.length || 0} icon={<Users size={22} strokeWidth={3} />} />
@@ -144,36 +137,7 @@ export default function Home() {
         <section style={{ marginBottom: "2rem" }}>
           <h2 style={{ fontSize: "1.125rem", fontWeight: "900", marginBottom: "1rem" }}>Nejbližší výpravy</h2>
           {!dashboardDataReady ? (<p role="status">Načítám údaje oddílu…</p>) : trips && trips.length > 0 ? (
-            <Card padding="none" style={{ overflow: "hidden" }}>
-              <TableScroller>
-                <table style={{ width: "100%", minWidth: "720px", borderCollapse: "collapse" }}>
-                  <thead>
-                    <tr style={{ borderBottom: "var(--border-ui)", backgroundColor: "var(--color-primary)" }}>
-                      <th style={tableHeadStyle}>Název</th>
-                      <th style={tableHeadStyle}>Místo</th>
-                      <th style={tableHeadStyle}>Datum</th>
-                      <th style={tableHeadStyle}>Stav</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {trips.slice(0, 5).map((trip, idx) => (
-                      <tr key={trip._id} style={{ borderBottom: idx === Math.min(4, trips.length - 1) ? "none" : "var(--border-ui)" }}>
-                        <td style={{ padding: "1rem", fontWeight: "800" }}>
-                          <Link href={`/trips/${trip._id}`} style={{ color: "inherit", textDecoration: "underline" }}>
-                            {trip.name}
-                          </Link>
-                        </td>
-                        <td style={{ padding: "1rem" }}>{trip.location}</td>
-                        <td style={{ padding: "1rem", fontSize: "0.9rem", color: "var(--text-muted)" }}>{formatDate(trip.startDate)}</td>
-                        <td style={{ padding: "1rem" }}>
-                          <span style={statusBadgeStyle}>Plánuje se</span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </TableScroller>
-            </Card>
+            <TripList trips={trips.slice(0, 5)} />
           ) : (
             <EmptyStateCard
               title="Žádné výpravy"
@@ -211,7 +175,7 @@ export default function Home() {
                 />
               </Field>
 
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "1rem", marginBottom: "1rem" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 250px), 1fr))", gap: "1rem", marginBottom: "1rem" }}>
                 {filteredTopics.length > 0 ? (
                   filteredTopics.map(({ Icon, ...topic }) => (
                     <Card key={topic.title} padding="sm">
@@ -249,20 +213,3 @@ export default function Home() {
     </div>
   );
 }
-
-const tableHeadStyle: CSSProperties = {
-  padding: "1rem",
-  textAlign: "left",
-  fontWeight: "900",
-};
-
-const statusBadgeStyle: CSSProperties = {
-  display: "inline-block",
-  backgroundColor: "var(--color-primary)",
-  border: "var(--border-ui)",
-  borderRadius: "var(--radius-md)",
-  padding: "0.25rem 0.75rem",
-  fontWeight: "900",
-  fontSize: "0.85rem",
-  boxShadow: "var(--shadow-md)",
-};

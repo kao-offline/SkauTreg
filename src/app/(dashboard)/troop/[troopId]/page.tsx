@@ -6,32 +6,9 @@ import { Id } from "../../../../../convex/_generated/dataModel";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import { PageContent, PageHeader, PageTitle } from "@/components/ui";
 import Button from "../../../../components/Button";
 import { useMemo } from "react";
-
-const SpinningLogo = ({ src, alt = "Logo" }: { src?: string; alt?: string }) => (
-    <div style={{
-        width: "48px",
-        height: "48px",
-        borderRadius: "50%",
-        border: "2px solid #000",
-        backgroundColor: "#ccc",
-        boxShadow: "2px 2px 0 0 #000",
-        position: "relative",
-        overflow: "hidden",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexShrink: 0,
-    }}>
-        {src ? (
-            <img src={src} alt={alt} style={{ width: "100%", height: "100%", objectFit: "cover", animation: "spin 10s linear infinite" }} />
-        ) : (
-            <span style={{ fontSize: "0.7rem", fontWeight: "bold" }}>LOGO</span>
-        )}
-        <style jsx>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
-    </div>
-);
 
 export default function TroopDashboard() {
     const params = useParams();
@@ -107,34 +84,15 @@ export default function TroopDashboard() {
     if (troop === null) return <div>Oddíl nenalezen.</div>;
 
     return (
-        <div className="dashboardContentX" style={{ width: "100%", position: "relative", overflowX: "hidden" }}>
-            {/* Top Title Bar */}
-            <div style={{
-                backgroundColor: "white",
-                borderBottom: "3px solid #000",
-                height: "72px",
-                padding: ".625rem 2rem",
-                margin: "0 -2rem 2rem -2rem", // Break out to full width
-                width: "calc(100% + 4rem)",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center"
-            }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                    <SpinningLogo src={troop.logo} />
-                    <div>
-                        {troop.number && <div style={{ fontSize: "0.9rem", fontWeight: "800", color: "#666" }}>{troop.number}. Oddíl</div>}
-                        <h1 style={{ fontSize: "1.5rem", fontWeight: "900", margin: 0, lineHeight: 1 }}>{troop.name}</h1>
-                    </div>
-                </div>
-            </div>
-
+        <div style={{ width: "100%", position: "relative", overflowX: "hidden" }}>
+            <PageHeader><PageTitle>{troop.name}</PageTitle></PageHeader>
+            <PageContent>
             {/* Dashboard Grid */}
             <div className="u-mb-4" style={{ marginBottom: "3rem" }}>
                 <h3 className="u-text-lg u-font-bold u-mb-4">Rychlé Akce</h3>
                 <div style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 250px), 1fr))",
                     gap: "1.5rem"
                 }}>
                     {sections.map((card, index) => (
@@ -185,7 +143,7 @@ export default function TroopDashboard() {
                         </div>
                     </div>
                 ) : (
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "2rem" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 300px), 1fr))", gap: "2rem" }}>
                         {trips.slice(0, 3).map((trip: any) => ( // Show only top 3
                             <Link key={trip._id} href={`/trips/${trip._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 <div style={{
@@ -239,7 +197,7 @@ export default function TroopDashboard() {
                 )}
             </div>
 
-            {/* Modal Removed - Redirects to Settings Page */}
+            </PageContent>
         </div>
     );
 }

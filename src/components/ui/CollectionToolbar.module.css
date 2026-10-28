@@ -1,0 +1,13 @@
+.container { min-width: 0; margin-bottom: 1.5rem; }
+.toolbar { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 1rem; }
+.toolbar > label { flex: 1 1 180px; min-width: 0; }
+.toolbar > .search { flex: 2 1 240px; }
+.actions { display: flex; align-items: center; flex-wrap: wrap; gap: .75rem; }
+.filters { display: flex; flex-wrap: wrap; gap: 0 1.25rem; margin-top: 1.25rem; border-bottom: var(--surface-border); }
+.filters button { min-height: 44px; padding: .65rem .15rem; color: var(--text-muted); background: transparent; border: 0; border-bottom: 3px solid transparent; font-size: .875rem; font-weight: 750; cursor: pointer; }
+.filters button[aria-pressed="true"] { color: #166534; border-bottom-color: #16803c; }
+@media (max-width: 600px) {
+  .toolbar { align-items: stretch; gap: .875rem; }
+  .toolbar > label, .toolbar > .search, .actions { flex-basis: 100%; width: 100%; }
+  .actions > * { flex: 1 1 150px; min-width: 0; }
+}

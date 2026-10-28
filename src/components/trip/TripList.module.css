@@ -1,0 +1,12 @@
+.list { overflow: hidden; list-style: none; background: var(--bg-card); border: var(--border-ui); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
+.list li + li { border-top: var(--surface-border); }
+.list a { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 76px; padding: 1rem 1.25rem; }
+.list a:hover { background: #f0fdf4; }
+.copy { min-width: 0; display: grid; gap: .35rem; overflow-wrap: anywhere; }
+.copy strong { font-size: 1rem; font-weight: 750; }
+.copy span { color: var(--text-muted); font-size: .9375rem; }
+.list time { flex: 0 0 auto; color: #166534; font-size: .875rem; font-weight: 650; font-variant-numeric: tabular-nums; }
+@media (max-width: 680px) {
+  .list a { align-items: flex-start; flex-direction: column; gap: .65rem; padding: 1rem; }
+  .list time { flex: 0 1 auto; overflow-wrap: anywhere; }
+}
