@@ -44,9 +44,9 @@ const TroopLogo = ({ src, alt = "Logo" }: { src?: string; alt?: string }) => (
         width: "120px",
         height: "120px",
         borderRadius: "50%",
-        border: "3px solid #000",
+        border: "var(--border-ui)",
         backgroundColor: "#ccc",
-        boxShadow: "4px 4px 0 0 #000",
+        boxShadow: "var(--shadow-md)",
         position: "relative",
         overflow: "hidden",
         display: "flex",
@@ -239,7 +239,7 @@ export default function TroopSettingsPage() {
                             />
                         </div>
                         {myRole === "owner" && (
-                            <div style={{ ...formGroupStyle, padding: "1rem", border: "2px solid #111", borderRadius: "10px", background: "#f8fafc" }}>
+                            <div style={{ ...formGroupStyle, padding: "1rem", border: "var(--border-ui)", borderRadius: "10px", background: "#f8fafc" }}>
                                 <label style={{ ...labelStyle, display: "flex", alignItems: "center", gap: ".65rem" }}>
                                     <input
                                         type="checkbox"
@@ -342,11 +342,11 @@ export default function TroopSettingsPage() {
                                 display: "inline-block",
                                 padding: "0.75rem 1.5rem",
                                 backgroundColor: "white",
-                                border: "3px solid #000",
+                                border: "var(--border-ui)",
                                 borderRadius: "8px",
                                 fontWeight: "800",
                                 cursor: "pointer",
-                                boxShadow: "4px 4px 0 0 #000"
+                                boxShadow: "var(--shadow-md)"
                             }}>
                                 Nahrát Nové Logo
                                 <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: "none" }} />
@@ -366,7 +366,7 @@ export default function TroopSettingsPage() {
                                             height: "50px",
                                             borderRadius: "50%",
                                             backgroundColor: color,
-                                            border: formData.accentColor === color ? "4px solid #000" : "2px solid #ccc",
+                                            border: formData.accentColor === color ? "var(--border-ui)" : "2px solid #ccc",
                                             cursor: "pointer",
                                             transform: formData.accentColor === color ? "scale(1.1)" : "scale(1)",
                                             transition: "all 0.1s"
@@ -435,7 +435,7 @@ export default function TroopSettingsPage() {
                             style={{
                                 padding: "0.75rem 1.5rem",
                                 backgroundColor: "white",
-                                border: "3px solid #000",
+                                border: "var(--border-ui)",
                                 borderRadius: "8px",
                                 fontWeight: "800",
                                 cursor: "pointer",
@@ -451,11 +451,11 @@ export default function TroopSettingsPage() {
                             style={{
                                 padding: "0.75rem 1.5rem",
                                 backgroundColor: "#86efac",
-                                border: "3px solid #000",
+                                border: "var(--border-ui)",
                                 borderRadius: "8px",
                                 fontWeight: "900",
                                 cursor: "pointer",
-                                boxShadow: "4px 4px 0 0 #000",
+                                boxShadow: "var(--shadow-md)",
                                 flex: "1 1 auto",
                                 minWidth: "120px"
                             }}
@@ -526,7 +526,7 @@ const labelStyle = {
 
 const inputStyle = {
     padding: "0.75rem",
-    border: "2px solid #000",
+    border: "var(--border-ui)",
     borderRadius: "8px",
     fontSize: "1rem",
     outline: "none",

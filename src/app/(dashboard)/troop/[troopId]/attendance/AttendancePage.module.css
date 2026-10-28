@@ -25,9 +25,9 @@
 .memberIdentity small { margin-top: .12rem; color: var(--text-muted); font-size: .73rem; }
 .avatar { width: 40px; height: 40px; display: grid; place-items: center; flex: 0 0 auto; color: #143213; background: #d9f99d; border: 2px solid #111; border-radius: 50%; font-size: .75rem; font-weight: 900; }
 .statusButtons { display: grid; grid-template-columns: repeat(3, 1fr); gap: .45rem; }
-.statusButtons button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: .3rem; padding: .45rem .6rem; color: #3f3f46; background: #fafafa; border: 1px solid #b9bac0; border-radius: 8px; font-size: .75rem; font-weight: 800; cursor: pointer; }
+.statusButtons button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: .3rem; padding: .45rem .6rem; color: #3f3f46; background: #fafafa; border: var(--control-border); border-radius: 8px; font-size: .75rem; font-weight: 800; cursor: pointer; }
 .statusButtons button:hover:not(:disabled) { color: #111; border-color: #111; }
-.statusButtons button[data-active="true"] { color: #111; border: 2px solid #111; box-shadow: 1px 1px 0 #111; }
+.statusButtons button[data-active="true"] { color: #111; border: 1px solid #57745f; box-shadow: var(--shadow-sm); }
 .statusButtons button[data-status="present"][data-active="true"] { background: #bbf7d0; }
 .statusButtons button[data-status="absent"][data-active="true"] { background: #fecaca; }
 .statusButtons button[data-status="excused"][data-active="true"] { background: #fde68a; }
@@ -39,7 +39,7 @@
 .setupCard p { color: var(--text-muted); line-height: 1.55; }
 .setupCard a { margin-top: .45rem; padding: .7rem 1rem; background: var(--color-primary); border: 2px solid #111; border-radius: 9px; box-shadow: 2px 2px 0 #111; font-weight: 850; }
 @media (max-width: 760px) {
-  .header { height: 64px; padding: .75rem 1rem; }
+  .header { min-height: 64px; padding: .75rem 1rem; }
   .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .memberRow { grid-template-columns: 1fr; gap: .7rem; }
   .toolbar { align-items: center; flex-wrap: wrap; }
@@ -57,4 +57,41 @@
   .toolbar label { min-width: 0; flex: 1; }
   .toolbar input { width: 100%; min-width: 0; font-size: 1rem; }
   .summary span { white-space: normal; overflow-wrap: anywhere; }
+}
+
+/* Shrink the native iOS date field and its shadow content within the middle track. */
+.toolbar { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; align-items: end; }
+.toolbar label { min-width: 0; width: 100%; }
+.toolbar input { display: block; appearance: none; -webkit-appearance: none; width: 100%; max-width: 100%; min-width: 0; min-inline-size: 0; box-sizing: border-box; font: inherit; font-weight: 650; }
+.toolbar input::-webkit-date-and-time-value { min-width: 0; text-align: center; }
+.toolbar input::-webkit-datetime-edit { min-width: 0; padding: 0; }
+.toolbar > strong { grid-column: 1 / -1; width: auto; margin: .35rem 0 0; overflow-wrap: anywhere; font-weight: 650; }
+.toolbar button, .toolbar input { border: var(--control-border); }
+.memberIdentity strong, .memberIdentity small { white-space: normal; overflow-wrap: anywhere; }
+.avatar { border: 1px solid #a9c6a5; }
+.statusButtons { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.statusButtons button { min-width: 0; font-weight: 650; transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease; }
+.statusButtons button[data-active="true"] { border: 1px solid #57745f; box-shadow: var(--shadow-sm); }
+.statusButtons button:not(:disabled):active { transform: scale(.98); }
+@media (prefers-reduced-motion: reduce) { .statusButtons button { transition: none; transform: none !important; } }
+
+@media (max-width: 420px) {
+  .toolbar label { grid-column: 1 / -1; grid-row: 1; }
+  .toolbar button:first-child { grid-column: 1; grid-row: 2; }
+  .toolbar button:nth-of-type(2) { grid-column: 3; grid-row: 2; }
+  .toolbar > strong { grid-column: 2; grid-row: 2; margin: 0; align-self: center; text-align: center; }
+  .statusButtons button { flex-wrap: wrap; overflow-wrap: anywhere; }
+}
+
+@media (max-width: 420px) {
+  .summary > div { grid-template-columns: auto minmax(0, 1fr); row-gap: .35rem; }
+  .summary span { grid-column: 1 / -1; grid-row: 2; }
+  .summary strong { grid-column: 2; grid-row: 1; justify-self: end; }
+}
+
+@media (max-width: 420px) {
+  .summary > div > :first-child { grid-column: 1; grid-row: 1; }
+}
+@media (max-width: 360px) {
+  .toolbar > strong { grid-column: 1 / -1; grid-row: 3; }
 }

@@ -62,9 +62,9 @@ const TroopLogo = ({ src, alt = "Logo" }: { src?: string; alt?: string }) => (
         width: "48px",
         height: "48px",
         borderRadius: "50%",
-        border: "2px solid #000",
+        border: "var(--border-ui)",
         backgroundColor: "#ccc", // Placeholder gray
-        boxShadow: "4px 4px 0 0 #000", // The shadow (static)
+        boxShadow: "var(--shadow-md)", // The shadow (static)
         position: "relative",
         overflow: "hidden",
         display: "flex",

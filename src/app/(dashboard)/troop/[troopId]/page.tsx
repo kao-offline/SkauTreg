@@ -100,10 +100,10 @@ export default function TroopDashboard() {
                             {/* Inline Card Style to match Grid context if Card component isn't styled perfectly for grid */}
                             <div style={{
                                 backgroundColor: "white",
-                                border: "3px solid #000",
+                                border: "var(--border-ui)",
                                 borderRadius: "12px",
                                 padding: "1.5rem",
-                                boxShadow: "6px 6px 0 0 #000",
+                                boxShadow: "var(--shadow-md)",
                                 transition: "transform 0.1s, box-shadow 0.1s",
                                 height: "100%",
                                 display: "flex",
@@ -148,10 +148,10 @@ export default function TroopDashboard() {
                             <Link key={trip._id} href={`/trips/${trip._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 <div style={{
                                     backgroundColor: 'white',
-                                    border: '3px solid #000',
+                                    border: 'var(--border-ui)',
                                     borderRadius: '16px',
                                     padding: '1.5rem',
-                                    boxShadow: "6px 6px 0 0 #000",
+                                    boxShadow: "var(--shadow-md)",
                                     transition: 'transform 0.1s',
                                     display: "flex",
                                     flexDirection: "column",
@@ -182,7 +182,7 @@ export default function TroopDashboard() {
                                     <div style={{
                                         marginTop: "1.5rem",
                                         paddingTop: "1rem",
-                                        borderTop: "2px solid #000",
+                                        borderTop: "var(--border-ui)",
                                         fontWeight: "600",
                                         display: "flex",
                                         justifyContent: "space-between"
