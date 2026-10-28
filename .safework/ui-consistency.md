@@ -13,3 +13,14 @@
 - npm audit:prod failed with 41 existing advisories (32 moderate, seven high, two critical). Dependencies and lockfile are unchanged.
 - Authenticated service-backed workflows have not been exercised with a signed-in account. Convex tests use the repository test environment.
 - Next: export committed files only and deploy to the verified Vercel preview project. Record deployment and PR results here after completion.
+
+## Delivery result
+
+- Source revision deployed: 573547afddf00cd50af6d58be866319bc3083dfd.
+- Clean committed export: 42 tests passed. The working tree's 44 includes two pre-existing uncommitted backend tests.
+- Vercel preview: https://skau-treg-f3uiqb0dy-kikoaidev-gmailcoms-projects.vercel.app
+- Deployment ID: dpl_9JMeC3MTz3iiDb14gyfirJpmHa1d; Vercel status Ready.
+- Verified via authenticated Vercel CLI: /api/health HTTP 200, release matches the source revision, app ok, Convex ok; /sign-in HTTP 200.
+- PR: https://github.com/kao-offline/SkauTreg/pull/6, base feat/dochazka; CI was in progress at handoff. No merge or production promotion performed.
+- Production rollback is unnecessary because production is unchanged. Preview can be superseded by a new deployment; source changes can be reverted through Git.
+- Local logs and original tracked-work patch are in the repository's parent directory under SkauTreg-ui-* and SkauTreg-before-ui.patch. Ignored browser harness and clean deployment export are under tmp/.
