@@ -3,7 +3,7 @@
 import { useConvexAuth } from "convex/react";
 import { useAuth, useClerk } from "@clerk/nextjs";
 import Sidebar from "../../components/Sidebar";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ProfileModalProvider } from "../../context/ProfileModalContext";
 import { SidebarProvider, useSidebar } from "../../context/SidebarContext";
@@ -36,14 +36,8 @@ function DashboardLayoutInner({
     const router = useRouter();
     const pathname = usePathname();
     const isTripWorkspace = /^\/trips\/[^/]+/.test(pathname || "");
-    const previousTripWorkspace = useRef(isTripWorkspace);
-    const previousLoadingScreen = useRef(isLoading || !isClerkLoaded);
-    const transitionTimeout = useRef<number | null>(null);
-    const dashboardReadyListener = useRef<(() => void) | null>(null);
-    const [modeTransition, setModeTransition] = useState<{ mode: "trip" | "dashboard"; phase: "covering" | "revealing" } | null>(null);
-    const [showLoadingScreen, setShowLoadingScreen] = useState(isLoading || !isClerkLoaded);
-
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const closeSidebar = useCallback(() => setIsSidebarOpen(false), []);
     const { isSidebarCollapsed, setIsSidebarCollapsed } = useSidebar();
 
     const convexAuthReady = useMemo(() => !isLoading && isAuthenticated, [isLoading, isAuthenticated]);
@@ -55,91 +49,7 @@ function DashboardLayoutInner({
         }
     }, [isClerkLoaded, isSignedIn, router]);
 
-    useLayoutEffect(() => {
-        const modeChanged = previousTripWorkspace.current !== isTripWorkspace;
-        const loadingStopped = previousLoadingScreen.current && !isAppLoading;
-        previousTripWorkspace.current = isTripWorkspace;
-        previousLoadingScreen.current = isAppLoading;
-
-        if (isAppLoading) {
-            if (!showLoadingScreen) setShowLoadingScreen(true);
-            return;
-        }
-
-        if (loadingStopped) {
-            if (!isSignedIn || !convexAuthReady) {
-                setShowLoadingScreen(false);
-                return;
-            }
-
-            if (transitionTimeout.current !== null) window.clearTimeout(transitionTimeout.current);
-            setModeTransition({ mode: isTripWorkspace ? "trip" : "dashboard", phase: "covering" });
-            transitionTimeout.current = window.setTimeout(() => {
-                setShowLoadingScreen(false);
-                const revealApplication = () => {
-                    if (dashboardReadyListener.current) {
-                        window.removeEventListener("skautreg:dashboard-ready", dashboardReadyListener.current);
-                        dashboardReadyListener.current = null;
-                    }
-                    if (transitionTimeout.current !== null) window.clearTimeout(transitionTimeout.current);
-                    setModeTransition({ mode: isTripWorkspace ? "trip" : "dashboard", phase: "revealing" });
-                    transitionTimeout.current = window.setTimeout(() => {
-                        setModeTransition(null);
-                        transitionTimeout.current = null;
-                    }, 760);
-                };
-
-                if (pathname === "/" || pathname === "/home") {
-                    dashboardReadyListener.current = revealApplication;
-                    window.addEventListener("skautreg:dashboard-ready", revealApplication, { once: true });
-                    transitionTimeout.current = window.setTimeout(revealApplication, 4000);
-                } else {
-                    transitionTimeout.current = window.setTimeout(revealApplication, 350);
-                }
-            }, 590);
-            return;
-        }
-
-        if (!modeChanged) return;
-
-        if (transitionTimeout.current !== null) window.clearTimeout(transitionTimeout.current);
-        setModeTransition({ mode: isTripWorkspace ? "trip" : "dashboard", phase: "revealing" });
-        transitionTimeout.current = window.setTimeout(() => {
-            setModeTransition(null);
-            transitionTimeout.current = null;
-        }, 760);
-    }, [convexAuthReady, isAppLoading, isSignedIn, isTripWorkspace, pathname, showLoadingScreen]);
-
-    useEffect(() => () => {
-        if (transitionTimeout.current !== null) window.clearTimeout(transitionTimeout.current);
-        if (dashboardReadyListener.current) window.removeEventListener("skautreg:dashboard-ready", dashboardReadyListener.current);
-    }, []);
-
-    const handleModeNavigation = (event: ReactMouseEvent<HTMLDivElement>) => {
-        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-        if (!(event.target instanceof Element)) return;
-
-        const anchor = event.target.closest("a[href]");
-        if (!anchor || anchor.hasAttribute("download") || (anchor.getAttribute("target") && anchor.getAttribute("target") !== "_self")) return;
-
-        const destination = new URL(anchor.getAttribute("href") || "", window.location.href);
-        if (destination.origin !== window.location.origin) return;
-
-        const destinationIsTripWorkspace = /^\/trips\/[^/]+/.test(destination.pathname);
-        if (destinationIsTripWorkspace === isTripWorkspace) return;
-
-        event.preventDefault();
-        const mode = destinationIsTripWorkspace ? "trip" : "dashboard";
-        const href = `${destination.pathname}${destination.search}${destination.hash}`;
-        if (transitionTimeout.current !== null) window.clearTimeout(transitionTimeout.current);
-        setModeTransition({ mode, phase: "covering" });
-        transitionTimeout.current = window.setTimeout(() => {
-            transitionTimeout.current = null;
-            router.push(href);
-        }, 590);
-    };
-
-    if (isAppLoading || showLoadingScreen) {
+    if (isAppLoading) {
         return (
             <div className={styles.loadingScreen} role="status" aria-live="polite">
                 <div className={styles.loadingContent}>
@@ -147,13 +57,6 @@ function DashboardLayoutInner({
                     <div className={styles.loadingTrack} aria-hidden="true"><span /></div>
                     <span className={styles.loadingLabel}>Načítám…</span>
                 </div>
-                {modeTransition && (
-                    <div className={styles.modeTransition} data-mode={modeTransition.mode} data-phase={modeTransition.phase} aria-hidden="true">
-                        <span />
-                        <span />
-                        <span />
-                    </div>
-                )}
             </div>
         );
     }
@@ -171,13 +74,7 @@ function DashboardLayoutInner({
                 <span className={styles.statusEyebrow}>Problém s připojením</span>
                 <h2>Pracovní prostor se nepodařilo načíst</h2>
                 <p>
-                    Relace Clerk je aktivní, ale ověření Convex selhalo. Může to znamenat:
-                    <br />
-                    • služba Convex neběží nebo je špatně nastavená
-                    <br />
-                    • v prostředí Convex chybí CLERK_ISSUER_URL
-                    <br />
-                    • NEXT_PUBLIC_CONVEX_URL není nastavená správně
+                    Připojení se nepodařilo ověřit. Zkuste stránku načíst znovu. Pokud problém přetrvává, odhlaste se a znovu se přihlaste.
                 </p>
                 <div className={styles.statusActions}>
                     <button
@@ -202,21 +99,14 @@ function DashboardLayoutInner({
 
     return (
         <ProfileModalProvider>
-            <div className={styles.container} onClickCapture={handleModeNavigation}>
-                {modeTransition && (
-                    <div className={styles.modeTransition} data-mode={modeTransition.mode} data-phase={modeTransition.phase} aria-hidden="true">
-                        <span />
-                        <span />
-                        <span />
-                    </div>
-                )}
+            <div className={styles.container}>
                 {!isTripWorkspace && <Sidebar
                     isOpen={isSidebarOpen} 
-                    onClose={() => setIsSidebarOpen(false)}
+                    onClose={closeSidebar}
                     isCollapsed={isSidebarCollapsed}
                     onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
                 />}
-                {!isTripWorkspace && <button className={styles.mobileMenuButton} onClick={() => setIsSidebarOpen(true)} aria-label="Otevřít navigaci"><Menu size={22} /></button>}
+                {!isTripWorkspace && <button className={styles.mobileMenuButton} onClick={() => setIsSidebarOpen(true)} aria-expanded={isSidebarOpen} aria-controls="app-sidebar" aria-label="Otevřít navigaci"><Menu size={22} /></button>}
 
                 {/* Desktop Sidebar Expand Button */}
                 {isSidebarCollapsed && !isTripWorkspace && (
@@ -232,7 +122,7 @@ function DashboardLayoutInner({
                 <CommandMenu />
                 <UpdateNotification />
 
-                <main className={`${styles.mainContent} ${isSidebarCollapsed || isTripWorkspace ? styles.mainContentExpanded : ''}`}>
+                <main inert={isSidebarOpen || undefined} className={`${styles.mainContent} ${isSidebarCollapsed || isTripWorkspace ? styles.mainContentExpanded : ''}`}>
                     {children}
                 </main>
                 <ProfileModal />

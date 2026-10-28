@@ -4,6 +4,7 @@ import { useFeedback } from "@/context/FeedbackContext";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { useState } from "react";
+import { ModalShell } from "./ui";
 import styles from "./ErrorModal.module.css";
 
 export default function ErrorModal() {
@@ -46,8 +47,7 @@ export default function ErrorModal() {
     };
 
     return (
-        <div className={styles.overlay} onClick={closeError}>
-            <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <ModalShell className={styles.modal} width="500px" onClose={isReporting ? undefined : closeError} aria-label={errorConfig.title || "Chyba"}>
                 <div className={styles.header}>
                     <div className={styles.titleRow}>
                         <span className={styles.icon}>
@@ -57,7 +57,7 @@ export default function ErrorModal() {
                             {errorConfig.title || "Chyba"}
                         </h2>
                     </div>
-                    <button className={styles.closeBtn} onClick={closeError}>
+                    <button className={styles.closeBtn} onClick={closeError} disabled={isReporting} aria-label="Zavřít">
                         ×
                     </button>
                 </div>
@@ -74,10 +74,11 @@ export default function ErrorModal() {
 
                     {errorConfig.canReport && (
                         <div className={styles.reportSection}>
-                            <label className={styles.label}>
+                            <label className={styles.label} htmlFor="error-report-notes">
                                 Poznámka (volitelně):
                             </label>
                             <textarea
+                                id="error-report-notes"
                                 value={reportNotes}
                                 onChange={(e) => setReportNotes(e.target.value)}
                                 placeholder="Popište, co se stalo."
@@ -123,7 +124,6 @@ export default function ErrorModal() {
                         )}
                     </div>
                 </div>
-            </div>
-        </div>
+        </ModalShell>
     );
 }

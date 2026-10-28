@@ -18,7 +18,7 @@ export default function SuccessModal() {
 
     return (
         <div className={styles.container}>
-            <div className={styles.toast}>
+            <div className={styles.toast} role="status" aria-live="polite">
                 <div className={styles.content}>
                     <span className={styles.icon}>
                         <img src="/icons/home-icon.svg" alt="success" style={{ width: "20px", height: "20px" }} />
@@ -30,7 +30,7 @@ export default function SuccessModal() {
                         <div className={styles.message}>{successConfig.message}</div>
                     </div>
                 </div>
-                <button className={styles.closeBtn} onClick={closeSuccess}>
+                <button className={styles.closeBtn} onClick={closeSuccess} aria-label="Zavřít oznámení">
                     ✕
                 </button>
             </div>

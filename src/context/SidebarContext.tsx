@@ -3,6 +3,8 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface SidebarContextType {
+    activeTroopId: string | null;
+    setActiveTroopId: (id: string) => void;
     isSidebarCollapsed: boolean;
     setIsSidebarCollapsed: (collapsed: boolean) => void;
 }
@@ -10,10 +12,11 @@ interface SidebarContextType {
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
+    const [activeTroopId, setActiveTroopId] = useState<string | null>(null);
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
     return (
-        <SidebarContext.Provider value={{ isSidebarCollapsed, setIsSidebarCollapsed }}>
+        <SidebarContext.Provider value={{ isSidebarCollapsed, setIsSidebarCollapsed, activeTroopId, setActiveTroopId }}>
             {children}
         </SidebarContext.Provider>
     );

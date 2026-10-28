@@ -1,10 +1,10 @@
 .header {
-  min-height: 70px;
+  min-height: var(--page-header-height);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.9rem 2rem;
+  padding: .9rem var(--page-gutter);
   border-bottom: var(--surface-border);
   background: #fff;
 }
@@ -12,9 +12,10 @@
 .title {
   margin: 0;
   color: var(--text-main);
-  font-size: 1.5rem;
+  font-size: var(--page-title-size);
   font-weight: 900;
-  line-height: 1.1;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
 }
 
 .actions {
@@ -36,7 +37,7 @@
 
 .content {
   width: 100%;
-  padding: 1.75rem 2rem 3rem;
+  padding: 1.75rem var(--page-gutter) 3rem;
   box-sizing: border-box;
 }
 
@@ -50,7 +51,9 @@
 @media (max-width: 768px) {
   .header {
     min-height: 64px;
-    padding: 0.9rem 1rem;
+    padding: .9rem var(--page-gutter);
+    flex-wrap: wrap;
+    align-items: flex-start;
   }
 
   .content {
@@ -59,5 +62,9 @@
 
   .toolbar {
     align-items: stretch;
+  }
+
+  .actions {
+    justify-content: flex-start;
   }
 }

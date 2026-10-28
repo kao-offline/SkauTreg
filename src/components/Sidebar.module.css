@@ -11,7 +11,7 @@
     border-right: 2px solid #000;
     transition: transform .25s ease;
 }
-.sidebar.collapsed { transform: translateX(-100%); }
+.sidebar.collapsed { transform: translateX(-100%); visibility: hidden; }
 .logoArea { min-height: 72px; padding: 1rem 1.1rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #2d2f31; }
 .logoLink { display: flex; min-width: 0; }
 .logoImage { width: 148px; height: auto; }
@@ -25,7 +25,7 @@
 .sidebarSearch:hover { color: #fff; border-color: #62676d; background: #222629; }
 .sidebarSearch span { flex: 1; text-align: left; }
 .sidebarSearch kbd { padding: .14rem .32rem; color: #9fa3a8; background: #111; border: 1px solid #3d4145; border-radius: 4px; font: inherit; font-size: .63rem; }
-.sectionLabel { margin: .8rem .65rem .4rem; color: #8e9297; font-size: .66rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.sectionLabel { margin: .8rem .65rem .4rem; color: #8e9297; font-size: .75rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
 .navList { list-style: none; margin: 0; padding: 0; display: grid; gap: .15rem; }
 .navItem { position: relative; min-height: 40px; display: flex; align-items: center; gap: .7rem; padding: .58rem .7rem; color: #c3c6ca; border-radius: 8px; font-size: .84rem; font-weight: 650; transition: background .15s ease, color .15s ease; }
 .navItem:hover { color: #fff; background: #202326; }
@@ -40,7 +40,7 @@
 .projectMark img { width: 100%; height: 100%; object-fit: cover; }
 .projectCopy { min-width: 0; flex: 1; display: grid; gap: .12rem; }
 .projectCopy strong { overflow: hidden; color: #fff; font-size: .85rem; text-overflow: ellipsis; white-space: nowrap; }
-.projectCopy small { color: #8e9297; font-size: .67rem; }
+.projectCopy small { color: #8e9297; font-size: .75rem; }
 .projectChevron { transition: transform .2s ease; }
 .projectPicker[open] .projectChevron { transform: rotate(180deg); }
 .projectOptions { display: grid; gap: .18rem; margin-top: .35rem; padding: .35rem; background: #181b1d; border: 1px solid #33373b; border-radius: 9px; }
@@ -52,7 +52,7 @@
 .optionMark img { width: 100%; height: 100%; object-fit: cover; }
 .projectOptions .addProject { justify-content: center; margin-top: .15rem; color: var(--color-primary); border: 1px dashed #4b5155; }
 .projectNav { position: relative; margin: .25rem 0 .1rem 1.05rem; padding-left: .65rem; border-left: 1px solid #3a3d40; }
-.projectItem { min-height: 35px; padding-block: .45rem; font-size: .78rem; }
+.projectItem { min-height: 40px; padding-block: .45rem; font-size: .8125rem; }
 .navWithSubmenu { position: relative; }
 .submenuChevron { margin-left: auto; color: #747a7f; }
 .inlineSubmenu { display: none; }
@@ -67,12 +67,12 @@
 .profileAvatar { width: 34px; height: 34px; display: grid; place-items: center; color: #111; background: var(--color-primary); border: 2px solid #000; border-radius: 50%; }
 .profileButton > span:nth-child(2) { min-width: 0; flex: 1; display: grid; gap: .08rem; }
 .profileButton strong { font-size: .8rem; }
-.profileButton small { color: #8e9297; font-size: .66rem; }
+.profileButton small { color: #8e9297; font-size: .75rem; }
 .overlay { display: none; position: fixed; inset: 0; z-index: 45; background: rgba(0,0,0,.55); backdrop-filter: blur(2px); }
 
 @media (max-width: 768px) {
     .sidebar { width: min(86vw, 300px); transform: translateX(-100%); box-shadow: 8px 0 24px rgba(0,0,0,.24); }
-    .sidebar.open { transform: translateX(0); }
+    .sidebar.open { transform: translateX(0); visibility: visible; }
     .overlay.visible { display: block; }
     .closeButton { display: grid; }
     .collapseButton { display: none; }
@@ -80,4 +80,13 @@
     .inlineSubmenu a { padding: .42rem .5rem; border-radius: 5px; font-size: .68rem; font-weight: 700; }
     .inlineSubmenu a:hover { color: #07150d; background: var(--color-primary); }
     .floatingSubmenu { display: none; }
+}
+
+@media (pointer: coarse) {
+  .navItem, .projectOptions > a, .sidebarSearch, .closeButton { min-height: 44px; }
+  .closeButton { min-width: 44px; }
+}
+
+@media (max-width: 768px) {
+  .sidebar:not(.open) { visibility: hidden; }
 }

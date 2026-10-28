@@ -7,8 +7,8 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   font-family: inherit;
-  font-weight: 900;
-  line-height: 1;
+  font-weight: 750;
+  line-height: 1.25;
   text-decoration: none;
   color: var(--text-main);
   cursor: pointer;
@@ -42,7 +42,7 @@
 }
 
 .md {
-  min-height: 42px;
+  min-height: 44px;
   padding: 0.65rem 1rem;
   font-size: 0.95rem;
 }
@@ -130,10 +130,15 @@
 
 .circle.md,
 .icon.md {
-  width: 42px;
+  width: 44px;
 }
 
 .circle.lg,
 .icon.lg {
   width: 50px;
+}
+
+@media (pointer: coarse) {
+  .sm { min-height: 44px; }
+  .circle.sm, .icon.sm { width: 44px; }
 }

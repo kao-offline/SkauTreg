@@ -63,6 +63,9 @@ body {
 
   /* Spacing */
   --sidebar-width: 268px;
+  --page-gutter: 2rem;
+  --page-header-height: 72px;
+  --page-title-size: 1.5rem;
 }
 
 * {
@@ -231,7 +234,7 @@ select::-ms-expand {
   box-sizing: border-box;
   min-height: 72px;
   height: auto;
-  padding: 1rem 2rem;
+  padding: .9rem var(--page-gutter);
   border-bottom: var(--surface-border);
   position: relative;
   min-width: 0;
@@ -244,15 +247,15 @@ select::-ms-expand {
 
 /* Standard padding for dashboard page content */
 .dashboardContent {
-  padding: 1.75rem 2rem 3rem;
+  padding: 1.75rem var(--page-gutter) 3rem;
   width: 100%;
   box-sizing: border-box;
 }
 
 /* Horizontal-only padding (useful when a page has its own header) */
 .dashboardContentX {
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-left: var(--page-gutter);
+  padding-right: var(--page-gutter);
   width: 100%;
   box-sizing: border-box;
 }
@@ -338,4 +341,8 @@ table {
   .dashboardContent {
     padding: 1rem;
   }
+}
+
+@media (max-width: 768px) {
+  :root { --page-gutter: 1rem; --page-header-height: 64px; --page-title-size: 1.3rem; }
 }
