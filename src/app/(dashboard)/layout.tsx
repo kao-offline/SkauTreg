@@ -125,10 +125,9 @@ function DashboardLayoutInner({
                 <main inert={isSidebarOpen || undefined} className={`${styles.mainContent} ${isSidebarCollapsed || isTripWorkspace ? styles.mainContentExpanded : ''}`}>
                     {children}
                 </main>
-                <nav className={styles.mobileDock} aria-label="Navigace a soukromí" inert={isSidebarOpen || undefined}>
+                {!isTripWorkspace && <nav className={styles.mobileDock} aria-label="Navigace" inert={isSidebarOpen || undefined}>
                 {!isTripWorkspace && <button className={styles.mobileMenuButton} onClick={() => setIsSidebarOpen(true)} aria-expanded={isSidebarOpen} aria-controls="app-sidebar" aria-label="Otevřít navigaci"><Menu size={22} /><span>Menu</span></button>}
-                    <button type="button" className={styles.privacyButton} onClick={() => window.dispatchEvent(new Event("skautreg:open-privacy"))}>Soukromí</button>
-                </nav>
+                </nav>}
                 <ProfileModal />
             </div>
         </ProfileModalProvider>
