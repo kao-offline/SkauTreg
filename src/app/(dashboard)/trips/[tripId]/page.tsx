@@ -434,7 +434,6 @@ export default function TripDashboardPage() {
 
                 <div className={workspaceStyles.railActions}>
                     <span>Správa výpravy</span>
-                    <button onClick={() => window.dispatchEvent(new Event("skautreg:open-privacy"))}>Soukromí</button>
                     <button className={workspaceStyles.deleteAction} onClick={handleDelete}><Trash2 size={16} /> Smazat</button>
                 </div>
             </aside>

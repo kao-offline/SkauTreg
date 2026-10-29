@@ -92,9 +92,6 @@ export default function AnalyticsConsent() {
 
   return (
     <>
-      <footer className="privacy-footer">
-        <Button type="button" variant="ghost" onClick={() => setOpen(true)}>Soukromí</Button>
-      </footer>
       {open && (
         <ModalShell width="520px" onClose={consent ? () => setOpen(false) : undefined}>
           <ModalHeader><ModalTitle>Nastavení soukromí</ModalTitle></ModalHeader>

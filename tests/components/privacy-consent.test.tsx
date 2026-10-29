@@ -32,6 +32,7 @@ it("keeps a session choice usable when browser storage fails", () => {
   render(<AnalyticsConsent />);
   fireEvent.click(screen.getByRole("button", { name: "Pouze nezbytné" }));
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Soukromí" }));
+  expect(screen.queryByRole("button", { name: "Soukromí" })).not.toBeInTheDocument();
+  act(() => window.dispatchEvent(new Event("skautreg:open-privacy")));
   expect(screen.getByRole("dialog")).toHaveAccessibleName("Nastavení soukromí");
 });

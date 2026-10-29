@@ -348,6 +348,3 @@ table {
 @media (max-width: 768px) {
   :root { --page-gutter: 1rem; --page-header-height: 64px; --page-title-size: 1.3rem; }
 }
-
-.privacy-footer { padding: 1rem; text-align: center; background: var(--bg-app); }
-body:has([data-app-shell]) .privacy-footer { display: none; }

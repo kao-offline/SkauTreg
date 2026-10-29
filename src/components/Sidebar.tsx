@@ -228,7 +228,6 @@ export default function Sidebar({ isOpen = false, onClose, isCollapsed = false, 
                     </div>
 
                     <div className={styles.sidebarFooter}>
-                        <button className={styles.profileButton} onClick={() => { close(); window.dispatchEvent(new Event("skautreg:open-privacy")); }}>Soukromí</button>
                         <button onClick={() => { openProfile(); close(); }} className={styles.profileButton}>
                             <span className={styles.profileAvatar}><CircleUserRound size={21} /></span>
                             <span><strong>Můj profil</strong><small>Účet a předvolby</small></span>
